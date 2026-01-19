@@ -11,6 +11,7 @@ import com.example.fitnesstracker.network.RetrofitClient
 
 object RetrofitClient {
     private const val BASE_URL = "http://10.0.2.2/fitness/server/"
+//private const val BASE_URL = "http://192.168.100.16/fitness/server/"
 
     val instance: ApiService by lazy {
         Retrofit.Builder()

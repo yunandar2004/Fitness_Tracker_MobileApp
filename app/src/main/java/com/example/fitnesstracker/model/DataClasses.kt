@@ -59,8 +59,14 @@ data class User(
     val current_weight_kg: Double,
     val gender: String,
     val role: String,
-    val profile_image: String
+    val profile_image: String? // <- nullable
 )
+
+data class ImageResponse(
+    val message: String,
+    val image: String
+)
+
 
 data class Goal(
     val id: Int,

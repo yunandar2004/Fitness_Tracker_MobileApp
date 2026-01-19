@@ -1,18 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/cardview_dark_background"
     android:orientation="vertical"
-    android:padding="8dp">
+    android:padding="16dp">
 
     <TextView
-        android:text="Workout History"
+        android:id="@+id/tvHistoryTitle"
+        android:text="🏋️ Workout History"
         android:textStyle="bold"
-        android:textSize="18sp"
-        android:padding="8dp"
+        android:layout_marginTop="30dp"
+        android:textSize="20sp"
+        android:textColor="@android:color/white"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        android:paddingBottom="12dp"/>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvWorkouts"
@@ -22,19 +26,4 @@
         android:clipToPadding="false"
         android:paddingBottom="8dp"/>
 
-<!--    <TextView-->
-<!--        android:text="Current Goals"-->
-<!--        android:textStyle="bold"-->
-<!--        android:textSize="18sp"-->
-<!--        android:padding="8dp"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="wrap_content"/>-->
-
-<!--    <androidx.recyclerview.widget.RecyclerView-->
-<!--        android:id="@+id/rvGoals"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="0dp"-->
-<!--        android:layout_weight="1"-->
-<!--        android:clipToPadding="false"-->
-<!--        android:paddingBottom="8dp"/>-->
 </LinearLayout>

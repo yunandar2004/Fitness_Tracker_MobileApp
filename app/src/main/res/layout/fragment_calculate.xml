@@ -9,7 +9,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="37dp"
         android:padding="16dp">
 
         <!-- ================= HEADER ================= -->
@@ -71,6 +71,7 @@
             android:layout_marginBottom="8dp"/>
 
         <EditText
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:id="@+id/etUserWeight"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -79,6 +80,7 @@
 
         <EditText
             android:id="@+id/etDuration"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Duration (minutes)"
@@ -87,6 +89,7 @@
 
         <Spinner
             android:id="@+id/spinnerActivity"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"/>

@@ -78,6 +78,7 @@
 
 package com.example.fitnesstracker.network
 import com.example.fitnesstracker.model.*
+import okhttp3.MultipartBody
 import retrofit2.Response
 import retrofit2.http.*
 
@@ -104,6 +105,18 @@ interface ApiService {
 
     @HTTP(method = "DELETE", path = "users.php?action=delete", hasBody = true)
     suspend fun deleteAccount(@Body body: Map<String, String>): Response<DefaultResponse>
+    // pr0file
+//    @Multipart
+//    @POST("users.php?action=upload_image")
+//    suspend fun uploadProfileImage(
+//        @Part image: MultipartBody.Part
+//    ): Response<ImageResponse>
+
+    @Multipart
+    @POST("profile/update_image")
+    suspend fun uploadProfileImage(
+        @Part profile_image: MultipartBody.Part
+    ): Response<Any>
 
     // Goals
     @POST("goals.php?action=create")
@@ -148,4 +161,5 @@ interface ApiService {
 
     @HTTP(method = "DELETE", path = "admin.php?action=delete_user", hasBody = true)
     suspend fun adminDeleteUser(@Body body: Map<String, String>): Response<DefaultResponse>
+
 }
