@@ -8,14 +8,16 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import com.example.fitnesstracker.R
-import com.example.fitnesstracker.model.User
 import com.example.fitnesstracker.network.RetrofitClient
 import com.example.fitnesstracker.fitness.app.fragments.*
+import com.example.fitnesstracker.network.SessionManager
+import com.example.fitnesstracker.ui.goals.GoalsFragment
 import kotlinx.coroutines.launch
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         setContentView(R.layout.activity_main)
         try { RetrofitClient.init(this) } catch (e: Exception) {}
 

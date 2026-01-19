@@ -66,16 +66,20 @@ data class Goal(
     val id: Int,
     val title: String,
     val period: String,
+    val start_date: String?,
+    val end_date: String?,
     val status: String,
-    val created_at: String
+    val current_value: Int? = 0,  // track progress
+    val target_value: Int? = 0    // target
 )
+
 
 data class Workout(
     val id: Int,
     val activity: String,
     val burned_calories: Double,
     val time_minutes: Int,
-    val created_at: String
+    val created_at: String? = null
 )
 
 data class WorkoutResponse(

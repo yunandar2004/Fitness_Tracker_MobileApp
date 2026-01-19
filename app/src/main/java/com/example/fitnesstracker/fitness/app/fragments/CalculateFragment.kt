@@ -155,13 +155,47 @@ class CalculateFragment : Fragment() {
                         "level" to getServerLevelKey()
                     )
                 )
+
                 if (response.isSuccessful && response.body() != null) {
                     currentCalories = response.body()!!.burned_calories ?: 0.0
                     tvCalories.text = "Estimated: ${currentCalories.toInt()} kcal"
                     tvDetails.text = "Calculated on Server"
-                } else calculateLocalCalories(weight, duration, activity)
+                } else {
+                    calculateLocalCalories(weight, duration, activity)
+                }
             } catch (e: Exception) {
                 calculateLocalCalories(weight, duration, activity)
+            }
+        }
+    }
+
+    private fun saveWorkout() {
+        val activity = spinnerActivity.selectedItem.toString()
+        val duration = etDuration.text.toString().toIntOrNull() ?: 0
+        if (duration <= 0) {
+            Toast.makeText(requireContext(), "Invalid duration", Toast.LENGTH_SHORT).show()
+            return
+        }
+
+        lifecycleScope.launch {
+            try {
+                val response = RetrofitClient.instance.createWorkout(
+                    mapOf(
+                        "activity" to activity,
+                        "time_minutes" to duration.toString(),
+                        "burned_calories" to currentCalories.toString(),
+                        "level" to getServerLevelKey()
+                    )
+                )
+
+                if (response.isSuccessful) {
+                    Toast.makeText(requireContext(), "Workout Saved", Toast.LENGTH_SHORT).show()
+                } else {
+                    Toast.makeText(requireContext(), "Failed to save", Toast.LENGTH_SHORT).show()
+                }
+
+            } catch (e: Exception) {
+                Toast.makeText(requireContext(), "Error saving", Toast.LENGTH_SHORT).show()
             }
         }
     }
@@ -213,29 +247,29 @@ class CalculateFragment : Fragment() {
         }
     }
 
-    private fun saveWorkout() {
-        val activity = spinnerActivity.selectedItem.toString()
-        val duration = etDuration.text.toString().toIntOrNull() ?: 0
-        if (duration <= 0) { Toast.makeText(requireContext(), "Invalid duration", Toast.LENGTH_SHORT).show(); return }
-
-        lifecycleScope.launch {
-            try {
-                val response = RetrofitClient.instance.createWorkout(
-                    mapOf(
-                        "activity" to activity,
-                        "time_minutes" to duration.toString(),
-                        "burned_calories" to currentCalories.toString(),
-                        "level" to getServerLevelKey()
-                    )
-                )
-
-                if (response.isSuccessful) {
-                    Toast.makeText(requireContext(), "Workout Saved", Toast.LENGTH_SHORT).show()
-                } else {
-                    Toast.makeText(requireContext(), "Failed to save", Toast.LENGTH_SHORT).show()
-                }
-
-            } catch (e: Exception) { Toast.makeText(requireContext(), "Error saving", Toast.LENGTH_SHORT).show() }
-        }
-    }
+//    private fun saveWorkout() {
+//        val activity = spinnerActivity.selectedItem.toString()
+//        val duration = etDuration.text.toString().toIntOrNull() ?: 0
+//        if (duration <= 0) { Toast.makeText(requireContext(), "Invalid duration", Toast.LENGTH_SHORT).show(); return }
+//
+//        lifecycleScope.launch {
+//            try {
+//                val response = RetrofitClient.instance.createWorkout(
+//                    mapOf(
+//                        "activity" to activity,
+//                        "time_minutes" to duration.toString(),
+//                        "burned_calories" to currentCalories.toString(),
+//                        "level" to getServerLevelKey()
+//                    )
+//                )
+//
+//                if (response.isSuccessful) {
+//                    Toast.makeText(requireContext(), "Workout Saved", Toast.LENGTH_SHORT).show()
+//                } else {
+//                    Toast.makeText(requireContext(), "Failed to save", Toast.LENGTH_SHORT).show()
+//                }
+//
+//            } catch (e: Exception) { Toast.makeText(requireContext(), "Error saving", Toast.LENGTH_SHORT).show() }
+//        }
+//    }
 }

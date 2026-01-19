@@ -3,11 +3,13 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/cardview_dark_background"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:padding="8dp">
 
     <TextView
         android:text="Workout History"
         android:textStyle="bold"
+        android:textSize="18sp"
         android:padding="8dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
@@ -16,11 +18,14 @@
         android:id="@+id/rvWorkouts"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1"/>
+        android:layout_weight="1"
+        android:clipToPadding="false"
+        android:paddingBottom="8dp"/>
 
     <TextView
         android:text="Current Goals"
         android:textStyle="bold"
+        android:textSize="18sp"
         android:padding="8dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
@@ -29,6 +34,7 @@
         android:id="@+id/rvGoals"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1"/>
-
+        android:layout_weight="1"
+        android:clipToPadding="false"
+        android:paddingBottom="8dp"/>
 </LinearLayout>

@@ -75,6 +75,7 @@
 //    ): Response<ApiResponse<ProgressSummary>>
 //}
 //package com.example.fitnesstracker.network
+
 package com.example.fitnesstracker.network
 import com.example.fitnesstracker.model.*
 import retrofit2.Response
@@ -106,13 +107,19 @@ interface ApiService {
 
     // Goals
     @POST("goals.php?action=create")
-    suspend fun createGoal(@Body body: Map<String, String>): Response<DefaultResponse>
+    suspend fun createGoal(
+        @Body body: Map<String, String>
+    ): Response<DefaultResponse>
 
     @GET("goals.php?action=list")
     suspend fun getGoals(): Response<List<Goal>>
 
     @POST("goals.php?action=reset")
-    suspend fun resetGoal(@Body body: Map<String, String>): Response<DefaultResponse>
+    suspend fun resetGoal(
+        @Body body: Map<String, String>
+    ): Response<DefaultResponse>
+
+
 
     // Workouts
     @POST("workouts.php?action=create")
