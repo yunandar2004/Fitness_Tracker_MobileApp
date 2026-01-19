@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="Theme.FitnessTracker" parent="Theme.MaterialComponents.NoActionBar" />
+</resources>
+<!--    android:Theme.Material.Light.NoActionBar-->

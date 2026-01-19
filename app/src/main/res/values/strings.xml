@@ -1,0 +1,118 @@
+<!--<resources>-->
+<!--    <string name="app_name">FitnessTracker</string>-->
+<!--    <string name="hello_blank_fragment">Hello blank fragment</string>-->
+<!--    <string name="delete">Delete</string>-->
+
+<!--    <string name="label_kcal">Kcal</string>-->
+<!--    <string name="label_mins">Mins</string>-->
+<!--    <string name="title_weekly_goal">Weekly Goal Progress</string>-->
+<!--    <string name="title_quick_activities">Quick Activities</string>-->
+<!--    <string name="activity_running">Running</string>-->
+<!--    <string name="activity_cycling">Cycling</string>-->
+<!--    <string name="activity_weights">Weights</string>-->
+<!--    <string name="activity_yoga">Yoga</string>-->
+<!--    <string name="title_weekly_activity">Weekly Activity</string>-->
+<!--    <string name="title_recent_workouts">Recent Workouts</string>-->
+<!--    <string name="label_daily_tip">Daily Tip</string>-->
+
+<!--    <string name="desc_goal_progress">Weekly goal progress is 60 percent completed</string>-->
+<!--    <string name="desc_start_running">Start a running workout</string>-->
+<!--    <string name="desc_start_cycling">Start a cycling workout</string>-->
+<!--    <string name="desc_start_weights">Start a weightlifting workout</string>-->
+<!--    <string name="desc_start_yoga">Start a yoga session</string>-->
+<!--    <string name="desc_activity_chart">Bar chart showing activity over the week</string>-->
+<!--    <string name="desc_activity_bar_mon">Activity on Monday</string>-->
+<!--    <string name="desc_activity_bar_tue">Activity on Tuesday</string>-->
+<!--    <string name="desc_activity_bar_wed">Activity on Wednesday</string>-->
+<!--    <string name="desc_activity_bar_thu">Activity on Thursday</string>-->
+<!--    <string name="desc_activity_bar_fri">Activity on Friday</string>-->
+<!--    <string name="desc_activity_bar_sat">Activity on Saturday</string>-->
+<!--    <string name="desc_activity_bar_sun">Activity on Sunday</string>-->
+<!--    <string name="desc_recent_workout_list">List of recent workout sessions</string>-->
+
+<!--    <string name="label_select_activity">Select Activity</string>-->
+<!--    <string name="desc_select_activity">Dropdown to select workout type</string>-->
+
+<!--    <string name="label_user_weight">User Weight (kg)</string>-->
+<!--    <string name="hint_weight">70</string>-->
+
+<!--    <string name="label_duration_minutes">Duration (minutes)</string>-->
+<!--    <string name="hint_duration">30</string>-->
+
+<!--    <string name="label_avg_pace">Avg Pace (min/km)</string>-->
+<!--    <string name="hint_pace">e.g. 5.0</string>-->
+
+<!--    <string name="label_avg_speed">Avg Speed (km/h)</string>-->
+<!--    <string name="hint_speed">e.g. 20.0</string>-->
+
+<!--    <string name="label_walk_speed">Walking Speed (km/h)</string>-->
+
+<!--    <string name="label_intensity_level">Intensity Level</string>-->
+<!--    <string name="label_stroke_type">Stroke Type</string>-->
+
+<!--    <string name="btn_calculate">Calculate</string>-->
+<!--    <string name="desc_calculate_calories">Calculate estimated calories</string>-->
+<!--    <string name="btn_save_workout">Save Workout</string>-->
+<!--    <string name="desc_save_workout">Save workout to history</string>-->
+<!--&lt;!&ndash;    <string name="haha">haha</string>&ndash;&gt;-->
+<!--&lt;!&ndash;    <string name="hahaCar">car</string>&ndash;&gt;-->
+<!--</resources>-->
+<resources>
+    <string name="app_name">FitnessTracker</string>
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="delete">Delete</string>
+
+    <string name="label_kcal">Kcal</string>
+    <string name="label_mins">Mins</string>
+    <string name="title_weekly_goal">Weekly Goal Progress</string>
+    <string name="title_quick_activities">Quick Activities</string>
+    <string name="activity_running">Running</string>
+    <string name="activity_cycling">Cycling</string>
+    <string name="activity_weights">Weights</string>
+    <string name="activity_yoga">Yoga</string>
+    <string name="title_weekly_activity">Weekly Activity</string>
+    <string name="title_recent_workouts">Recent Workouts</string>
+    <string name="label_daily_tip">Daily Tip</string>
+
+    <string name="desc_goal_progress">Weekly goal progress is 60 percent completed</string>
+    <string name="desc_start_running">Start a running workout</string>
+    <string name="desc_start_cycling">Start a cycling workout</string>
+    <string name="desc_start_weights">Start a weightlifting workout</string>
+    <string name="desc_start_yoga">Start a yoga session</string>
+    <string name="desc_activity_chart">Bar chart showing activity over the week</string>
+    <string name="desc_activity_bar_mon">Activity on Monday</string>
+    <string name="desc_activity_bar_tue">Activity on Tuesday</string>
+    <string name="desc_activity_bar_wed">Activity on Wednesday</string>
+    <string name="desc_activity_bar_thu">Activity on Thursday</string>
+    <string name="desc_activity_bar_fri">Activity on Friday</string>
+    <string name="desc_activity_bar_sat">Activity on Saturday</string>
+    <string name="desc_activity_bar_sun">Activity on Sunday</string>
+    <string name="desc_recent_workout_list">List of recent workout sessions</string>
+
+    <string name="label_select_activity">Select Activity</string>
+    <string name="desc_select_activity">Dropdown to select workout type</string>
+
+    <string name="label_user_weight">User Weight (kg)</string>
+    <string name="hint_weight">70</string>
+
+    <string name="label_duration_minutes">Duration (minutes)</string>
+    <string name="hint_duration">30</string>
+
+    <string name="label_avg_pace">Avg Pace (min/km)</string>
+    <string name="hint_pace">e.g. 5.0</string>
+
+    <string name="label_avg_speed">Avg Speed (km/h)</string>
+    <string name="hint_speed">e.g. 20.0</string>
+
+    <string name="label_walk_speed">Walking Speed (km/h)</string>
+
+    <string name="label_intensity_level">Intensity Level</string>
+    <string name="label_stroke_type">Stroke Type</string>
+
+    <string name="btn_calculate">Calculate</string>
+    <string name="desc_calculate_calories">Calculate estimated calories</string>
+    <string name="btn_save_workout">Save Workout</string>
+    <string name="desc_save_workout">Save workout to history</string>
+    <!--    <string name="haha">haha</string>-->
+    <!--    <string name="hahaCar">car</string>-->
+</resources>
