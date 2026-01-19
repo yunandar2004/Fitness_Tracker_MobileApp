@@ -15,52 +15,62 @@
             android:id="@+id/tvGoalTitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Goal Title"
-            android:textSize="16sp"
-            android:textStyle="bold" />
+            android:text="Goal title"
+            android:textStyle="bold"
+            android:textSize="16sp"/>
 
         <TextView
             android:id="@+id/tvGoalType"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Type • Period"
-            android:textColor="#666666"
-            android:textSize="13sp"
-            android:layout_marginTop="2dp"/>
+            android:text="Period"
+            android:textSize="12sp"
+            android:textColor="#757575"/>
 
         <TextView
             android:id="@+id/tvGoalDates"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Start → End"
+            android:text="2025-01-01 → 2025-02-01"
             android:textSize="12sp"
-            android:textColor="#888888"
+            android:textColor="#757575"
             android:layout_marginTop="4dp"/>
+
+        <ProgressBar
+            android:id="@+id/progressBar"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"/>
 
         <TextView
             android:id="@+id/tvProgressText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Progress: 0 / 0"
-            android:textSize="13sp"
-            android:layout_marginTop="8dp"/>
+            android:textSize="12sp"
+            android:textColor="#757575"
+            android:layout_marginTop="4dp"/>
 
-        <ProgressBar
-            android:id="@+id/progressBar"
-            style="?android:attr/progressBarStyleHorizontal"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="8dp"
-            android:layout_marginTop="4dp"
-            android:max="100"
-            android:progress="0"/>
-
-        <Button
-            android:id="@+id/btnResetGoal"
-            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Reset"
-            android:layout_marginTop="10dp"
-            android:backgroundTint="#FF7043"
-            android:textColor="@android:color/white"/>
+            android:orientation="horizontal"
+            android:gravity="end"
+            android:layout_marginTop="8dp">
+
+            <Button
+                android:id="@+id/btnEditGoal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Edit"
+                android:layout_marginEnd="8dp"/>
+
+            <Button
+                android:id="@+id/btnResetGoal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Reset"/>
+        </LinearLayout>
     </LinearLayout>
 </androidx.cardview.widget.CardView>

@@ -1,15 +1,18 @@
 
 package com.example.fitnesstracker.ui.goals
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.fitnesstracker.R
+import com.example.fitnesstracker.fitness.app.LoginActivity
 import com.example.fitnesstracker.model.Goal
 import com.example.fitnesstracker.network.RetrofitClient
 import com.example.fitnesstracker.network.SessionManager
@@ -33,13 +36,14 @@ class GoalsFragment : Fragment() {
     private val goalsList = mutableListOf<Goal>()
     private lateinit var adapter: GoalsAdapter
 
+    private var editingGoalId: Int? = null
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         val view = inflater.inflate(R.layout.fragment_goals, container, false)
 
-        // Initialize views
         tvWelcome = view.findViewById(R.id.tvWelcome)
         spinnerPeriod = view.findViewById(R.id.spinnerPeriod)
         etGoalTitle = view.findViewById(R.id.etGoalTitle)
@@ -49,83 +53,49 @@ class GoalsFragment : Fragment() {
         btnSetGoal = view.findViewById(R.id.btnSetGoal)
         btnClearForm = view.findViewById(R.id.btnClearForm)
         rvMyGoals = view.findViewById(R.id.rvMyGoals)
+        val btnLogout = view.findViewById<Button>(R.id.btnLogout)
 
-        // Initialize SessionManager
+
         RetrofitClient.init(requireContext())
 
-        // Reference the TextView
         tvWelcome.text = "Welcome, ${SessionManager.getUsername()}"
+        btnLogout.setOnClickListener {
+            lifecycleScope.launch {
+                try { RetrofitClient.instance.logout() } catch (e: Exception) {}
+                // Navigate to login logic here
+                startActivity(Intent(requireContext(), LoginActivity::class.java))
+
+                requireActivity().finish()
+            }
+        }
+
         return view
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-//        val profileRes = RetrofitClient.instance.getProfile()
-//        val u = profileRes.body()
-
-        // Welcome
-        tvWelcome.text = "Welcome, ${SessionManager.getUsername()}"
 
         // Spinner
         val periods = listOf("day", "month", "duration")
-        spinnerPeriod.adapter =
-            ArrayAdapter(requireContext(), android.R.layout.simple_spinner_dropdown_item, periods)
+        spinnerPeriod.adapter = ArrayAdapter(
+            requireContext(),
+            android.R.layout.simple_spinner_dropdown_item,
+            periods
+        )
 
         // RecyclerView
         adapter = GoalsAdapter(goalsList)
         rvMyGoals.layoutManager = LinearLayoutManager(requireContext())
         rvMyGoals.adapter = adapter
 
-        fetchProfile()
-        // Load goals
         fetchGoals()
 
         // Buttons
-        btnSetGoal.setOnClickListener { saveGoal() }
+        btnSetGoal.setOnClickListener { saveOrUpdateGoal() }
         btnClearForm.setOnClickListener { clearForm() }
     }
 
-    /** Fetch goals from server */
-    private fun fetchGoals() {
-        //        val profileRes = RetrofitClient.instance.getProfile()
-
-        CoroutineScope(Dispatchers.IO).launch {
-            try {
-                val response = RetrofitClient.instance.getGoals()
-                if (response.isSuccessful) {
-                    val list = response.body() ?: emptyList()
-                    goalsList.clear()
-                    goalsList.addAll(list)
-                    withContext(Dispatchers.Main) { adapter.notifyDataSetChanged() }
-                } else showToast("Failed to load goals")
-            } catch (e: Exception) {
-                showToast("Error: ${e.message}")
-            }
-        }
-    }
-    private fun fetchProfile() {
-        CoroutineScope(Dispatchers.IO).launch {
-            try {
-                val response = RetrofitClient.instance.getProfile()
-                if (response.isSuccessful) {
-                    val user = response.body()
-                    withContext(Dispatchers.Main) {
-                        tvWelcome.text = "Welcome, ${user?.name ?: "User"}"
-                        // Optionally save username in SessionManager
-                        user?.name?.let { SessionManager.saveUsername(it) }
-                    }
-                } else {
-                    showToast("Failed to load profile")
-                }
-            } catch (e: Exception) {
-                showToast("Error: ${e.message}")
-            }
-        }
-    }
-
-
-    /** Save a new goal */
-    private fun saveGoal() {
+    private fun saveOrUpdateGoal() {
         val title = etGoalTitle.text.toString().trim()
         val period = spinnerPeriod.selectedItem.toString()
         val target = etGoalTarget.text.toString().trim()
@@ -147,50 +117,122 @@ class GoalsFragment : Fragment() {
 
         CoroutineScope(Dispatchers.IO).launch {
             try {
-                val response = RetrofitClient.instance.createGoal(body)
-                if (response.isSuccessful) {
-                    showToast("Goal saved")
-                    fetchGoals()
-                    clearForm()
-                } else showToast("Failed to save goal")
+                val response = if (editingGoalId == null) {
+                    RetrofitClient.instance.createGoal(body)
+                } else {
+                    body["id"] = editingGoalId.toString()
+                    RetrofitClient.instance.updateGoal(body)
+                }
+
+                withContext(Dispatchers.Main) {
+                    if (response.isSuccessful) {
+                        showToast(if (editingGoalId == null) "Goal saved" else "Goal updated")
+                        fetchGoals()
+                        clearForm()
+                        editingGoalId = null
+                        btnSetGoal.text = "Save Goal"
+                    } else {
+                        showToast("Failed to save/update goal")
+                    }
+                }
             } catch (e: Exception) {
-                showToast("Error: ${e.message}")
+                withContext(Dispatchers.Main) { showToast("Error: ${e.message}") }
             }
         }
     }
 
-    /** Reset a goal */
+    private fun fetchGoals() {
+        CoroutineScope(Dispatchers.IO).launch {
+            try {
+                val response = RetrofitClient.instance.getGoals()
+                if (response.isSuccessful) {
+                    val list = response.body() ?: emptyList()
+                    goalsList.clear()
+                    goalsList.addAll(list)
+                    withContext(Dispatchers.Main) { adapter.notifyDataSetChanged() }
+                } else showToast("Failed to load goals")
+            } catch (e: Exception) {
+                withContext(Dispatchers.Main) { showToast("Error: ${e.message}") }
+            }
+        }
+    }
+
+//    private fun resetGoal(goal: Goal) {
+//        val body = mapOf("id" to goal.id.toString())
+//        CoroutineScope(Dispatchers.IO).launch {
+//            try {
+//                val response = RetrofitClient.instance.resetGoal(body)
+//                if (response.isSuccessful) {
+//                    withContext(Dispatchers.Main) {
+//                        showToast("Goal reset")
+//                        fetchGoals() // Fetch updated list, removed from UI
+//                    }
+//                } else showToast("Failed to reset goal")
+//            } catch (e: Exception) {
+//                withContext(Dispatchers.Main) { showToast("Error: ${e.message}") }
+//            }
+//        }
+//    }
+
     private fun resetGoal(goal: Goal) {
         val body = mapOf("id" to goal.id.toString())
         CoroutineScope(Dispatchers.IO).launch {
             try {
                 val response = RetrofitClient.instance.resetGoal(body)
-                if (response.isSuccessful) {
-                    showToast("Goal reset")
-                    fetchGoals()
-                } else showToast("Failed to reset goal")
+                withContext(Dispatchers.Main) {
+                    if (response.isSuccessful) {
+                        showToast("Goal deleted")
+                        fetchGoals() // Refresh the list after deletion
+                    } else showToast("Failed to delete goal")
+                }
             } catch (e: Exception) {
-                showToast("Error: ${e.message}")
+                withContext(Dispatchers.Main) { showToast("Error: ${e.message}") }
             }
         }
     }
 
-    /** Clear form inputs */
+    private fun performLogout() {
+        lifecycleScope.launch {
+            try {
+                // 1. Call Server Logout (Optional but recommended)
+                // RetrofitClient.instance.logout()
+                // NOTE: You might skip the API call if server is down, but clearing local is mandatory.
+
+                // 2. CRITICAL: Clear Local Cookie
+                SessionManager.clearSession()
+
+                Toast.makeText(requireContext(), "Logged Out", Toast.LENGTH_SHORT).show()
+
+                // 3. Navigate to Login
+                val intent = Intent(requireContext(), LoginActivity::class.java)
+                intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                startActivity(intent)
+                requireActivity().finish()
+//                startActivity(Intent(this, LoginActivity::class.java))
+
+
+            } catch (e: Exception) {
+                // Even if API fails, clear session locally so user is logged out
+                SessionManager.clearSession()
+                requireActivity().finish()
+            }
+        }
+    }
+
+
     private fun clearForm() {
         etGoalTitle.text?.clear()
         etGoalTarget.text?.clear()
         etGoalStart.text?.clear()
         etGoalDeadline.text?.clear()
+        btnSetGoal.text = "Save Goal"
+        editingGoalId = null
     }
 
-    /** Show toast */
     private fun showToast(message: String) {
-        CoroutineScope(Dispatchers.Main).launch {
-            Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
-        }
+        Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
     }
 
-    /** RecyclerView Adapter */
     inner class GoalsAdapter(private val goals: List<Goal>) :
         RecyclerView.Adapter<GoalsAdapter.GoalViewHolder>() {
 
@@ -201,6 +243,7 @@ class GoalsFragment : Fragment() {
             val progressBar: ProgressBar = itemView.findViewById(R.id.progressBar)
             val tvProgressText: TextView = itemView.findViewById(R.id.tvProgressText)
             val btnReset: Button = itemView.findViewById(R.id.btnResetGoal)
+            val btnEdit: Button = itemView.findViewById(R.id.btnEditGoal)
         }
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): GoalViewHolder {
@@ -224,8 +267,20 @@ class GoalsFragment : Fragment() {
                 "Progress: ${goal.current_value ?: 0} / ${goal.target_value ?: 0}"
 
             holder.btnReset.setOnClickListener { resetGoal(goal) }
+            holder.btnEdit.setOnClickListener { editGoal(goal) }
         }
 
         override fun getItemCount(): Int = goals.size
+
+        private fun editGoal(goal: Goal) {
+            editingGoalId = goal.id
+            etGoalTitle.setText(goal.title)
+            val periods = listOf("day", "month", "duration")
+            spinnerPeriod.setSelection(periods.indexOf(goal.period).coerceAtLeast(0))
+            etGoalTarget.setText(goal.target_value?.toString() ?: "")
+            etGoalStart.setText(goal.start_date ?: "")
+            etGoalDeadline.setText(goal.end_date ?: "")
+            btnSetGoal.text = "Update Goal"
+        }
     }
 }

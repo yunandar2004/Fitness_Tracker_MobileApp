@@ -124,12 +124,14 @@
 //}
 package com.example.fitnesstracker.fitness.app
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Spinner
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
@@ -150,6 +152,8 @@ class RegisterActivity : AppCompatActivity() {
         val etWeight = findViewById<EditText>(R.id.etWeight)
         val spinnerGender = findViewById<Spinner>(R.id.spinnerGender)
         val btnReg = findViewById<Button>(R.id.btnRegister)
+        val tvGoLogin = findViewById<TextView>(R.id.tvGoLogin)
+
 
         ArrayAdapter.createFromResource(
             this, R.array.gender_array, android.R.layout.simple_spinner_item
@@ -168,6 +172,9 @@ class RegisterActivity : AppCompatActivity() {
                 "gender" to spinnerGender.selectedItem.toString().lowercase()
             )
             performRegister(map)
+        }
+        tvGoLogin.setOnClickListener {
+            startActivity(Intent(this, LoginActivity::class.java))
         }
     }
 

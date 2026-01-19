@@ -1,5 +1,6 @@
 package com.example.fitnesstracker.fitness.app.fragments
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -9,6 +10,7 @@ import android.widget.*
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import com.example.fitnesstracker.R
+import com.example.fitnesstracker.fitness.app.LoginActivity
 import com.example.fitnesstracker.network.RetrofitClient
 import kotlinx.coroutines.launch
 import org.json.JSONObject
@@ -48,7 +50,18 @@ class CalculateFragment : Fragment() {
     private var currentCalories = 0.0
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        val btnLogout = view?.findViewById<Button>(R.id.btnLogout)
+        btnLogout?.setOnClickListener {
+            lifecycleScope.launch {
+                try { RetrofitClient.instance.logout() } catch (e: Exception) {}
+                // Navigate to login logic here
+                startActivity(Intent(requireContext(), LoginActivity::class.java))
+
+                requireActivity().finish()
+            }
+        }
         return inflater.inflate(R.layout.fragment_calculate, container, false)
+
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

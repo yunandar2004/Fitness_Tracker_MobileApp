@@ -3,133 +3,223 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/cardview_dark_background"
-    android:padding="16dp">
+    android:fillViewport="true">
 
     <LinearLayout
-        android:orientation="vertical"
-        android:layout_marginTop="50dp"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginTop="30dp"
+        android:padding="16dp">
 
-        <!-- User Weight -->
+        <!-- ================= HEADER ================= -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:paddingBottom="12dp">
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/tvUsername"
+                    android:text="Hello,  👋"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="14sp"
+                    android:textColor="#BDBDBD"/>
+
+                <TextView
+                    android:text="Workout Calculator"
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@android:color/white"/>
+            </LinearLayout>
+
+            <Button
+                android:id="@+id/btnLogout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Logout"
+                android:textSize="12sp"
+                android:backgroundTint="#D32F2F"
+                android:textColor="@android:color/white"/>
+        </LinearLayout>
+
+        <!-- Divider -->
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#444"
+            android:layout_marginBottom="16dp"/>
+
+        <!-- ================= BASIC INPUT ================= -->
+        <TextView
+            android:text="Basic Details"
+            android:textStyle="bold"
+            android:textColor="@android:color/white"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="16sp"
+            android:layout_marginBottom="8dp"/>
+
         <EditText
             android:id="@+id/etUserWeight"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Weight (kg)"
-            android:inputType="numberDecimal" />
+            android:inputType="numberDecimal"/>
 
-        <!-- Duration -->
         <EditText
             android:id="@+id/etDuration"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Duration (minutes)"
-            android:inputType="number" />
+            android:inputType="number"
+            android:layout_marginTop="8dp"/>
 
-        <!-- Activity Spinner -->
         <Spinner
             android:id="@+id/spinnerActivity"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp" />
+            android:layout_marginTop="8dp"/>
 
-        <!-- Running Card -->
+        <!-- ================= ACTIVITY CARDS ================= -->
+
+        <!-- Running -->
         <androidx.cardview.widget.CardView
             android:id="@+id/cardRunning"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:visibility="gone"
-            android:layout_marginTop="8dp">
+            android:layout_marginTop="10dp">
+
             <LinearLayout
-                android:orientation="vertical"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="12dp">
+                android:padding="12dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:text="Running Details"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textStyle="bold"/>
+
                 <EditText
                     android:id="@+id/etPace"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="Pace (min/km)"
-                    android:inputType="numberDecimal" />
+                    android:inputType="numberDecimal"/>
             </LinearLayout>
         </androidx.cardview.widget.CardView>
 
-        <!-- Cycling Card -->
+        <!-- Cycling -->
         <androidx.cardview.widget.CardView
             android:id="@+id/cardCycling"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:visibility="gone"
-            android:layout_marginTop="8dp">
+            android:layout_marginTop="10dp">
+
             <LinearLayout
-                android:orientation="vertical"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="12dp">
+                android:padding="12dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:text="Cycling Details"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textStyle="bold"/>
+
                 <EditText
                     android:id="@+id/etSpeed"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="Speed (km/h)"
-                    android:inputType="numberDecimal" />
+                    android:inputType="numberDecimal"/>
             </LinearLayout>
         </androidx.cardview.widget.CardView>
 
-        <!-- Walking Card -->
+        <!-- Walking -->
         <androidx.cardview.widget.CardView
             android:id="@+id/cardWalking"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:visibility="gone"
-            android:layout_marginTop="8dp">
+            android:layout_marginTop="10dp">
+
             <LinearLayout
-                android:orientation="vertical"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="12dp">
+                android:padding="12dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:text="Walking Details"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textStyle="bold"/>
+
                 <EditText
                     android:id="@+id/etWalkSpeed"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="Speed (km/h)"
-                    android:inputType="numberDecimal" />
+                    android:inputType="numberDecimal"/>
             </LinearLayout>
         </androidx.cardview.widget.CardView>
 
-        <!-- Weightlifting Card -->
+        <!-- Weights -->
         <androidx.cardview.widget.CardView
             android:id="@+id/cardWeights"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:visibility="gone"
-            android:layout_marginTop="8dp">
+            android:layout_marginTop="10dp">
+
             <LinearLayout
-                android:orientation="vertical"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="12dp">
+                android:padding="12dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:text="Weight Training"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textStyle="bold"/>
 
                 <EditText
                     android:id="@+id/etSets"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
                     android:hint="Sets"
-                    android:inputType="number" />
+                    android:inputType="number"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
 
                 <EditText
                     android:id="@+id/etReps"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
                     android:hint="Reps"
-                    android:inputType="number" />
+                    android:inputType="number"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
 
                 <EditText
                     android:id="@+id/etLiftingWeight"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
                     android:hint="Weight (kg)"
-                    android:inputType="numberDecimal" />
+                    android:inputType="numberDecimal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
             </LinearLayout>
         </androidx.cardview.widget.CardView>
 
@@ -179,37 +269,39 @@
                     android:layout_height="wrap_content" />
             </LinearLayout>
         </androidx.cardview.widget.CardView>
-
-        <!-- Buttons -->
+        <!-- ================= BUTTONS ================= -->
         <Button
             android:id="@+id/btnCalculate"
+            android:text="Calculate Calories"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Calculate"
-            android:layout_marginTop="12dp"/>
+            android:layout_marginTop="16dp"/>
 
         <Button
             android:id="@+id/btnSaveWorkout"
+            android:text="Save Workout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Save Workout"
             android:layout_marginTop="8dp"/>
 
-        <!-- Result -->
+        <!-- ================= RESULT ================= -->
         <TextView
             android:id="@+id/tvCalories"
-            android:layout_width="match_parent"
+            android:text="Calories Burned: 0"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Calories: 0"
-            android:textSize="16sp"
-            android:layout_marginTop="12dp"/>
+            android:textColor="@android:color/white"
+            android:layout_marginTop="16dp"/>
 
         <TextView
             android:id="@+id/tvDetails"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
             android:text=""
             android:textSize="14sp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#BDBDBD"
             android:layout_marginTop="4dp"/>
 
     </LinearLayout>

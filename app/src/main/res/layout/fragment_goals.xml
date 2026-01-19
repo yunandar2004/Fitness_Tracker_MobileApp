@@ -6,16 +6,32 @@
     android:padding="16dp"
     android:background="@color/cardview_dark_background">
 
-    <!-- Welcome -->
-    <TextView
-        android:id="@+id/tvWelcome"
+    <!-- Welcome + Logout -->
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Welcome, User"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
         android:layout_marginTop="40dp"
-        android:textSize="20sp"
-        android:textStyle="bold"
-        android:layout_marginBottom="16dp" />
+        android:layout_marginBottom="16dp">
+
+        <TextView
+            android:id="@+id/tvWelcome"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Welcome, User"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:textColor="@android:color/white"/>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnLogout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Logout"
+            style="@style/Widget.MaterialComponents.Button.OutlinedButton"/>
+    </LinearLayout>
 
     <!-- Goal Type Spinner -->
     <Spinner
@@ -111,10 +127,12 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
 
+    <!-- Scrollable Goals List -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvMyGoals"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
+        android:scrollbars="vertical"
         android:nestedScrollingEnabled="true"/>
 </LinearLayout>

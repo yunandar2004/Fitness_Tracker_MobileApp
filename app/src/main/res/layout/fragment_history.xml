@@ -22,19 +22,19 @@
         android:clipToPadding="false"
         android:paddingBottom="8dp"/>
 
-    <TextView
-        android:text="Current Goals"
-        android:textStyle="bold"
-        android:textSize="18sp"
-        android:padding="8dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+<!--    <TextView-->
+<!--        android:text="Current Goals"-->
+<!--        android:textStyle="bold"-->
+<!--        android:textSize="18sp"-->
+<!--        android:padding="8dp"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"/>-->
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rvGoals"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:clipToPadding="false"
-        android:paddingBottom="8dp"/>
+<!--    <androidx.recyclerview.widget.RecyclerView-->
+<!--        android:id="@+id/rvGoals"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="0dp"-->
+<!--        android:layout_weight="1"-->
+<!--        android:clipToPadding="false"-->
+<!--        android:paddingBottom="8dp"/>-->
 </LinearLayout>

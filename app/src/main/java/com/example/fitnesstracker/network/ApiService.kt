@@ -119,6 +119,12 @@ interface ApiService {
         @Body body: Map<String, String>
     ): Response<DefaultResponse>
 
+    @PUT("goals.php?action=update")
+    suspend fun updateGoal(@Body body: Map<String, String>): Response<DefaultResponse>
+
+    @HTTP(method = "DELETE", path = "goals.php?action=delete", hasBody = true)
+    suspend fun deleteGoal(@Body body: Map<String, String>): Response<DefaultResponse>
+
 
 
     // Workouts

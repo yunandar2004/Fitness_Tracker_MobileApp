@@ -81,7 +81,7 @@ class HistoryFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         rvWorkouts = view.findViewById(R.id.rvWorkouts)
-        rvGoals = view.findViewById(R.id.rvGoals)
+//        rvGoals = view.findViewById(R.id.rvGoals)
 
         rvWorkouts.layoutManager = LinearLayoutManager(requireContext())
         rvGoals.layoutManager = LinearLayoutManager(requireContext())
