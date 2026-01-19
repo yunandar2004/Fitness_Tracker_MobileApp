@@ -1,249 +1,215 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#F5F7FA">
+    android:background="@color/cardview_dark_background"
+    android:padding="16dp">
 
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="16dp">
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
-        <!-- Activity Selector -->
-        <TextView
-            android:text="@string/label_select_activity"
-            android:textSize="18sp"
-            android:textStyle="bold"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+        <!-- User Weight -->
+        <EditText
+            android:id="@+id/etUserWeight"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Weight (kg)"
+            android:inputType="numberDecimal" />
 
+        <!-- Duration -->
+        <EditText
+            android:id="@+id/etDuration"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Duration (minutes)"
+            android:inputType="number" />
+
+        <!-- Activity Spinner -->
         <Spinner
             android:id="@+id/spinnerActivity"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:minHeight="48dp"
-            android:background="@android:drawable/editbox_background"/>
+            android:layout_marginTop="8dp" />
 
-        <!-- Common Inputs -->
-        <androidx.cardview.widget.CardView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:cardCornerRadius="8dp"
-            app:cardElevation="2dp"
-            android:layout_marginTop="16dp">
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:padding="16dp">
-                <TextView android:text="@string/label_user_weight" android:layout_width="wrap_content" android:layout_height="wrap_content"/>
-                <EditText
-                    android:id="@+id/etUserWeight"
-                    tools:text="70"
-                    android:hint="@string/hint_weight"
-                    android:inputType="numberDecimal"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:minHeight="48dp"/>
-                <TextView android:text="@string/label_duration_minutes" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="12dp"/>
-                <EditText
-                    android:id="@+id/etDuration"
-                    tools:text="30"
-                    android:hint="@string/hint_duration"
-                    android:inputType="number"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:minHeight="48dp"/>
-            </LinearLayout>
-        </androidx.cardview.widget.CardView>
-
-        <!-- Running -->
+        <!-- Running Card -->
         <androidx.cardview.widget.CardView
             android:id="@+id/cardRunning"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:cardCornerRadius="8dp"
-            app:cardElevation="2dp"
-            android:layout_marginTop="8dp"
-            android:visibility="gone">
-            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:padding="16dp">
-                <TextView android:text="@string/label_avg_pace" android:layout_width="wrap_content" android:layout_height="wrap_content"/>
+            android:visibility="gone"
+            android:layout_marginTop="8dp">
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="12dp">
                 <EditText
                     android:id="@+id/etPace"
-                    tools:text="5.0"
-                    android:hint="@string/hint_pace"
-                    android:inputType="numberDecimal"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:minHeight="48dp"/>
+                    android:hint="Pace (min/km)"
+                    android:inputType="numberDecimal" />
             </LinearLayout>
         </androidx.cardview.widget.CardView>
 
-        <!-- Cycling -->
+        <!-- Cycling Card -->
         <androidx.cardview.widget.CardView
             android:id="@+id/cardCycling"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:cardCornerRadius="8dp"
-            app:cardElevation="2dp"
-            android:layout_marginTop="8dp"
-            android:visibility="gone">
-            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:padding="16dp">
-                <TextView android:text="@string/label_avg_speed" android:layout_width="wrap_content" android:layout_height="wrap_content"/>
+            android:visibility="gone"
+            android:layout_marginTop="8dp">
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="12dp">
                 <EditText
                     android:id="@+id/etSpeed"
-                    tools:text="20.0"
-                    android:hint="@string/hint_speed"
-                    android:inputType="numberDecimal"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:minHeight="48dp"/>
+                    android:hint="Speed (km/h)"
+                    android:inputType="numberDecimal" />
             </LinearLayout>
         </androidx.cardview.widget.CardView>
 
-        <!-- Walking -->
+        <!-- Walking Card -->
         <androidx.cardview.widget.CardView
             android:id="@+id/cardWalking"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:cardCornerRadius="8dp"
-            app:cardElevation="2dp"
-            android:layout_marginTop="8dp"
-            android:visibility="gone">
-            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:padding="16dp">
-                <TextView android:text="@string/label_walk_speed" android:layout_width="wrap_content" android:layout_height="wrap_content"/>
+            android:visibility="gone"
+            android:layout_marginTop="8dp">
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="12dp">
                 <EditText
                     android:id="@+id/etWalkSpeed"
-                    tools:text="5.0"
-                    android:hint="5.0"
-                    android:inputType="numberDecimal"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:minHeight="48dp"/>
+                    android:hint="Speed (km/h)"
+                    android:inputType="numberDecimal" />
             </LinearLayout>
         </androidx.cardview.widget.CardView>
 
-        <!-- Weightlifting (Specific: Sets, Reps, Weight) -->
+        <!-- Weightlifting Card -->
         <androidx.cardview.widget.CardView
             android:id="@+id/cardWeights"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:cardCornerRadius="8dp"
-            app:cardElevation="2dp"
-            android:layout_marginTop="8dp"
-            android:visibility="gone">
-            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:padding="16dp">
-                <TextView android:text="Total Sets" android:layout_width="wrap_content" android:layout_height="wrap_content"/>
-                <EditText android:id="@+id/etSets" android:hint="e.g. 3" android:inputType="number" android:layout_width="match_parent" android:layout_height="wrap_content" android:minHeight="48dp"/>
+            android:visibility="gone"
+            android:layout_marginTop="8dp">
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="12dp">
 
-                <TextView android:text="Reps per Set" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="8dp"/>
-                <EditText android:id="@+id/etReps" android:hint="e.g. 10" android:inputType="number" android:layout_width="match_parent" android:layout_height="wrap_content" android:minHeight="48dp"/>
+                <EditText
+                    android:id="@+id/etSets"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Sets"
+                    android:inputType="number" />
 
-                <TextView android:text="Weight Lifted (kg)" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="8dp"/>
-                <EditText android:id="@+id/etLiftingWeight" android:hint="e.g. 20" android:inputType="numberDecimal" android:layout_width="match_parent" android:layout_height="wrap_content" android:minHeight="48dp"/>
+                <EditText
+                    android:id="@+id/etReps"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Reps"
+                    android:inputType="number" />
+
+                <EditText
+                    android:id="@+id/etLiftingWeight"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Weight (kg)"
+                    android:inputType="numberDecimal" />
             </LinearLayout>
         </androidx.cardview.widget.CardView>
 
-        <!-- Intensity (Shared by Yoga, HIIT, Weights) -->
+        <!-- Intensity Spinner (Weightlifting/Yoga/HIIT) -->
         <androidx.cardview.widget.CardView
             android:id="@+id/cardIntensity"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:cardCornerRadius="8dp"
-            app:cardElevation="2dp"
-            android:layout_marginTop="8dp"
-            android:visibility="gone">
-            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:padding="16dp">
-                <TextView android:id="@+id/tvIntensityLabel" android:text="@string/label_intensity_level" android:layout_width="wrap_content" android:layout_height="wrap_content"/>
+            android:visibility="gone"
+            android:layout_marginTop="8dp">
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="12dp">
+                <TextView
+                    android:id="@+id/tvIntensityLabel"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Intensity" />
                 <Spinner
                     android:id="@+id/spinnerIntensity"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:minHeight="48dp"/>
+                    android:layout_height="wrap_content" />
             </LinearLayout>
         </androidx.cardview.widget.CardView>
 
-        <!-- Stroke -->
+        <!-- Swimming Card -->
         <androidx.cardview.widget.CardView
             android:id="@+id/cardSwimStroke"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:cardCornerRadius="8dp"
-            app:cardElevation="2dp"
-            android:layout_marginTop="8dp"
-            android:visibility="gone">
-            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:padding="16dp">
-                <TextView android:text="@string/label_stroke_type" android:layout_width="wrap_content" android:layout_height="wrap_content"/>
+            android:visibility="gone"
+            android:layout_marginTop="8dp">
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="12dp">
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Stroke Type" />
                 <Spinner
                     android:id="@+id/spinnerStroke"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:minHeight="48dp"/>
+                    android:layout_height="wrap_content" />
             </LinearLayout>
         </androidx.cardview.widget.CardView>
 
         <!-- Buttons -->
-        <LinearLayout
+        <Button
+            android:id="@+id/btnCalculate"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginTop="16dp">
+            android:text="Calculate"
+            android:layout_marginTop="12dp"/>
 
-            <Button
-                android:id="@+id/btnCalculate"
-                android:text="@string/btn_calculate"
-                android:layout_weight="1"
-                android:layout_marginEnd="8dp"
-                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-                android:contentDescription="@string/desc_calculate_calories"/>
-
-            <Button
-                android:id="@+id/btnSaveWorkout"
-                android:text="@string/btn_save_workout"
-                android:layout_weight="1"
-                android:backgroundTint="#4CAF50"
-                style="@style/Widget.MaterialComponents.Button.TextButton"
-                android:contentDescription="@string/desc_save_workout"/>
-        </LinearLayout>
+        <Button
+            android:id="@+id/btnSaveWorkout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Save Workout"
+            android:layout_marginTop="8dp"/>
 
         <!-- Result -->
-        <androidx.cardview.widget.CardView
+        <TextView
+            android:id="@+id/tvCalories"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:cardCornerRadius="12dp"
-            app:cardElevation="4dp"
-            android:layout_marginTop="8dp"
-            android:background="#E8F5E9">
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:padding="24dp"
-                android:gravity="center">
+            android:text="Calories: 0"
+            android:textSize="16sp"
+            android:layout_marginTop="12dp"/>
 
-                <TextView
-                    android:id="@+id/tvCalories"
-                    tools:text="Estimated: 320 kcal"
-                    android:textSize="28sp"
-                    android:textStyle="bold"
-                    android:textColor="#FF9800"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"/>
-
-                <TextView
-                    android:id="@+id/tvDetails"
-                    tools:text="Estimated calories burned"
-                    android:textSize="14sp"
-                    android:textColor="#616161"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="4dp"/>
-            </LinearLayout>
-        </androidx.cardview.widget.CardView>
+        <TextView
+            android:id="@+id/tvDetails"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text=""
+            android:textSize="14sp"
+            android:layout_marginTop="4dp"/>
 
     </LinearLayout>
 </ScrollView>

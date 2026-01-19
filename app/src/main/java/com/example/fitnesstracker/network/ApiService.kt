@@ -121,6 +121,7 @@ interface ApiService {
     @GET("workouts.php?action=history")
     suspend fun getHistory(): Response<List<Workout>>
 
+
     // Calculate
     @POST("calculate.php")
     suspend fun calculateCalories(@Body body: Map<String, String>): Response<CalculateResponse>
