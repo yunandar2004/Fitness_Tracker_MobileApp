@@ -7,15 +7,18 @@
     android:layout_height="match_parent">
 
     <!-- The Container for your Fragments -->
+
+    <!-- The Bottom Navigation Bar -->
     <FrameLayout
         android:id="@+id/fragmentContainer"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:background="#FFFFFF"
+        app:layout_constraintBottom_toTopOf="@+id/bottomNav"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toTopOf="@+id/bottomNav" />
+        app:layout_constraintVertical_bias="1.0"
+        tools:layout_editor_absoluteX="-58dp" />
 
-    <!-- The Bottom Navigation Bar -->
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottomNav"
         android:layout_width="match_parent"
@@ -26,5 +29,18 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:menu="@menu/bottom_nav_menu"
         android:elevation="8dp"/>
+
+    <!-- Floating Action Button -->
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/img"
+        app:rippleColor="@color/white"
+    app:layout_constraintBottom_toTopOf="@id/bottomNav"
+    app:layout_constraintEnd_toEndOf="parent"
+    android:layout_marginEnd="16dp"
+    android:layout_marginBottom="16dp"
+    app:backgroundTint="@color/purple_500"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

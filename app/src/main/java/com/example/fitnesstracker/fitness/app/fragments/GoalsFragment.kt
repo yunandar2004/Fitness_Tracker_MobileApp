@@ -235,7 +235,6 @@ class GoalsFragment : Fragment() {
 
     inner class GoalsAdapter(private val goals: List<Goal>) :
         RecyclerView.Adapter<GoalsAdapter.GoalViewHolder>() {
-
         inner class GoalViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
             val tvTitle: TextView = itemView.findViewById(R.id.tvGoalTitle)
             val tvType: TextView = itemView.findViewById(R.id.tvGoalType)
@@ -245,7 +244,6 @@ class GoalsFragment : Fragment() {
             val btnReset: Button = itemView.findViewById(R.id.btnResetGoal)
             val btnEdit: Button = itemView.findViewById(R.id.btnEditGoal)
         }
-
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): GoalViewHolder {
             val view = LayoutInflater.from(parent.context)
                 .inflate(R.layout.row_goal, parent, false)
@@ -271,7 +269,6 @@ class GoalsFragment : Fragment() {
         }
 
         override fun getItemCount(): Int = goals.size
-
         private fun editGoal(goal: Goal) {
             editingGoalId = goal.id
             etGoalTitle.setText(goal.title)

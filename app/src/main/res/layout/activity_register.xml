@@ -13,21 +13,33 @@
         android:padding="32dp"
         android:gravity="center_horizontal">
 
-        <!-- App Name with Logo -->
-        <TextView
-            android:id="@+id/tvAppName"
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text=" Fitness Tracker"
-            android:textSize="28sp"
-            android:textStyle="bold"
-            android:textColor="@color/black"
-            android:drawableStart="@drawable/common_google_signin_btn_icon_light_normal"
-            android:drawablePadding="10dp"
-            android:layout_marginTop="40dp"
-            android:layout_marginBottom="8dp"/>
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_marginTop="32dp"
+            android:layout_marginBottom="16dp">
 
-        <!-- Greeting -->
+            <ImageView
+                android:id="@+id/ivLogo"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:src="@drawable/logo"
+                android:contentDescription="App Logo"
+                android:scaleType="centerInside"/>
+
+            <TextView
+                android:id="@+id/tvAppName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="12dp"
+                android:text="Fitness Tracker"
+                android:textColor="@color/black"
+                android:textSize="28sp"
+                android:textStyle="bold" />
+        </LinearLayout>
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

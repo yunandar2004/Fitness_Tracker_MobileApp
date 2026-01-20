@@ -28,7 +28,7 @@
 
                 <TextView
                     android:id="@+id/tvUsername"
-                    android:text="Hello,  👋"
+                    android:text="Hello,👋"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textSize="14sp"
@@ -62,7 +62,7 @@
 
         <!-- ================= BASIC INPUT ================= -->
         <TextView
-            android:text="Basic Details"
+            android:text="Stay active and track your progress"
             android:textStyle="bold"
             android:textColor="@android:color/white"
             android:layout_width="wrap_content"
@@ -98,6 +98,8 @@
 
         <!-- Running -->
         <androidx.cardview.widget.CardView
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+
             android:id="@+id/cardRunning"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -127,6 +129,8 @@
 
         <!-- Cycling -->
         <androidx.cardview.widget.CardView
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+
             android:id="@+id/cardCycling"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -156,6 +160,8 @@
 
         <!-- Walking -->
         <androidx.cardview.widget.CardView
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+
             android:id="@+id/cardWalking"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -185,6 +191,8 @@
 
         <!-- Weights -->
         <androidx.cardview.widget.CardView
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+
             android:id="@+id/cardWeights"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -228,6 +236,8 @@
 
         <!-- Intensity Spinner (Weightlifting/Yoga/HIIT) -->
         <androidx.cardview.widget.CardView
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+
             android:id="@+id/cardIntensity"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -252,6 +262,7 @@
 
         <!-- Swimming Card -->
         <androidx.cardview.widget.CardView
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:id="@+id/cardSwimStroke"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

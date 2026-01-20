@@ -50,16 +50,7 @@ class CalculateFragment : Fragment() {
     private var currentCalories = 0.0
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val btnLogout = view?.findViewById<Button>(R.id.btnLogout)
-        btnLogout?.setOnClickListener {
-            lifecycleScope.launch {
-                try { RetrofitClient.instance.logout() } catch (e: Exception) {}
-                // Navigate to login logic here
-                startActivity(Intent(requireContext(), LoginActivity::class.java))
 
-                requireActivity().finish()
-            }
-        }
         return inflater.inflate(R.layout.fragment_calculate, container, false)
 
     }
@@ -90,6 +81,16 @@ class CalculateFragment : Fragment() {
             cardWeights = view.findViewById(R.id.cardWeights)
             cardIntensity = view.findViewById(R.id.cardIntensity)
             cardSwimStroke = view.findViewById(R.id.cardSwimStroke)
+            val btnLogout = view.findViewById<Button>(R.id.btnLogout)
+            btnLogout.setOnClickListener {
+                lifecycleScope.launch {
+                    try { RetrofitClient.instance.logout() } catch (e: Exception) {}
+                    // Navigate to login logic here
+                    startActivity(Intent(requireContext(), LoginActivity::class.java))
+
+                    requireActivity().finish()
+                }
+            }
 
             val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_dropdown_item, activities)
             spinnerActivity.adapter = adapter
@@ -172,7 +173,7 @@ class CalculateFragment : Fragment() {
                 if (response.isSuccessful && response.body() != null) {
                     currentCalories = response.body()!!.burned_calories ?: 0.0
                     tvCalories.text = "Estimated: ${currentCalories.toInt()} kcal"
-                    tvDetails.text = "Calculated on Server"
+                    tvDetails.text = "You're burning calories ${currentCalories.toInt()} — great job!Keep going! Every step counts."
                 } else {
                     calculateLocalCalories(weight, duration, activity)
                 }

@@ -5,7 +5,6 @@
     android:orientation="vertical"
     android:padding="16dp"
     android:background="@color/cardview_dark_background">
-
     <!-- Welcome + Logout -->
     <LinearLayout
         android:layout_width="match_parent"
@@ -32,14 +31,12 @@
             android:text="Logout"
             style="@style/Widget.MaterialComponents.Button.OutlinedButton"/>
     </LinearLayout>
-
     <!-- Goal Type Spinner -->
     <Spinner
         android:id="@+id/spinnerPeriod"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="12dp" />
-
     <!-- Goal Title -->
     <com.google.android.material.textfield.TextInputLayout
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
@@ -51,7 +48,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
     </com.google.android.material.textfield.TextInputLayout>
-
     <!-- Target -->
     <com.google.android.material.textfield.TextInputLayout
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
@@ -65,7 +61,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
     </com.google.android.material.textfield.TextInputLayout>
-
     <!-- Start Date -->
     <com.google.android.material.textfield.TextInputLayout
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
@@ -78,7 +73,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
     </com.google.android.material.textfield.TextInputLayout>
-
     <!-- End Date -->
     <com.google.android.material.textfield.TextInputLayout
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
@@ -91,7 +85,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
     </com.google.android.material.textfield.TextInputLayout>
-
     <!-- Buttons -->
     <LinearLayout
         android:orientation="horizontal"
@@ -117,7 +110,6 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"/>
     </LinearLayout>
-
     <!-- Current Goals -->
     <TextView
         android:text="Current Goals"
@@ -126,7 +118,6 @@
         android:layout_marginTop="24dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
-
     <!-- Scrollable Goals List -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvMyGoals"

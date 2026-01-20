@@ -19,6 +19,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         setContentView(R.layout.activity_main)
+
         try { RetrofitClient.init(this) } catch (e: Exception) {}
 
         checkUserRole()

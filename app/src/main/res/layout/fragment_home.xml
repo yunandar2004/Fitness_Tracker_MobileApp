@@ -1,9 +1,11 @@
-<?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+
+<androidx.core.widget.NestedScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#F5F7FA">
+    android:background="@color/cardview_dark_background"
+    android:fillViewport="true">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -30,7 +32,7 @@
                     android:text="Hi there!"
                     android:textSize="24sp"
                     android:textStyle="bold"
-                    android:textColor="#333333"
+                    android:textColor="#999999"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"/>
 
@@ -134,84 +136,57 @@
             </LinearLayout>
         </androidx.cardview.widget.CardView>
 
-        <!-- 4. Activity Shortcuts -->
+        <!-- 4. Activity Shortcuts (Horizontal Scrollable) -->
         <TextView android:text="Quick Activities" android:textSize="16sp" android:textStyle="bold" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="16dp"/>
 
-        <LinearLayout
+        <HorizontalScrollView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:weightSum="4"
+            android:scrollbars="none"
             android:layout_marginTop="8dp">
 
             <LinearLayout
-                android:id="@+id/btnRun"
-                android:layout_width="0dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:orientation="vertical"
-                android:background="#E3F2FD"
-                android:padding="12dp"
-                android:clickable="true"
-                android:focusable="true">
-                <ImageView android:src="@android:drawable/ic_menu_directions" android:layout_width="30dp" android:layout_height="30dp" android:tint="#2196F3"/>
-                <TextView android:text="Running" android:textSize="10sp" android:textColor="#2196F3" android:layout_marginTop="4dp" android:layout_width="wrap_content" android:layout_height="wrap_content" android:gravity="center"/>
-            </LinearLayout>
+                android:orientation="horizontal"
+                android:spacing="8dp">
+                <!-- Existing activities -->
+                <include
+                    layout="@layout/activity_btn_template"
+                    android:id="@+id/btnRun" />
 
-            <LinearLayout
-                android:id="@+id/btnCycle"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:orientation="vertical"
-                android:background="#E8F5E9"
-                android:padding="12dp"
-                android:clickable="true"
-                android:focusable="true">
-                <ImageView android:src="@android:drawable/ic_menu_send" android:layout_width="30dp" android:layout_height="30dp" android:tint="#FF9800"/>
-                <TextView android:text="Cycling" android:textSize="10sp" android:textColor="#FF9800" android:layout_marginTop="4dp" android:layout_width="wrap_content" android:layout_height="wrap_content" android:gravity="center"/>
-            </LinearLayout>
+                <include
+                    layout="@layout/activity_btn_template"
+                    android:id="@+id/btnCycle" />
 
-            <LinearLayout
-                android:id="@+id/btnWeight"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:orientation="vertical"
-                android:background="#F3E5F5"
-                android:padding="12dp"
-                android:clickable="true"
-                android:focusable="true">
-                <ImageView android:src="@android:drawable/ic_menu_sort_by_size" android:layout_width="30dp" android:layout_height="30dp" android:tint="#673AB7"/>
-                <TextView android:text="Weight Lifting" android:textSize="10sp" android:textColor="#673AB7" android:layout_marginTop="4dp" android:layout_width="wrap_content" android:layout_height="wrap_content" android:gravity="center"/>
+                <include
+                    layout="@layout/activity_btn_template"
+                    android:id="@+id/btnWeight" />
+
+                <include
+                    layout="@layout/activity_btn_template"
+                    android:id="@+id/btnYoga" />
+
+                <!-- New activities -->
+                <include
+                    layout="@layout/activity_btn_template"
+                    android:id="@+id/btnSwimming" />
+
+                <include
+                    layout="@layout/activity_btn_template"
+                    android:id="@+id/btnHIIT" />
+
+                <include
+                    layout="@layout/activity_btn_template"
+                    android:id="@+id/btnWalking" />
+
+
             </LinearLayout>
 
 
-            <LinearLayout
-                android:id="@+id/btnYoga"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:orientation="vertical"
-                android:background="#E1BEE7"
-                android:padding="12dp"
-                android:clickable="true"
-                android:focusable="true">
+        </HorizontalScrollView>
 
-                <ImageView
-                    android:layout_width="30dp"
-                    android:layout_height="19dp"
-                    android:src="@android:drawable/ic_menu_revert"
-                    android:tint="#009688" />
-                <TextView android:text="Yoga" android:textSize="10sp" android:textColor="#009688" android:layout_marginTop="4dp" android:layout_width="wrap_content" android:layout_height="wrap_content" android:gravity="center"/>
-            </LinearLayout>
-        </LinearLayout>
-
-        <!-- 5. Analytics Snapshot (Mock Chart) -->
+        <!-- 5. Analytics Snapshot -->
         <TextView android:text="Weekly Activity" android:textSize="16sp" android:textStyle="bold" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="16dp"/>
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
@@ -226,7 +201,6 @@
                 android:gravity="bottom"
                 android:padding="16dp">
 
-                <!-- Bars (Mon, Tue, Wed, Thu, Fri, Sat, Sun) -->
                 <View android:layout_width="0dp" android:layout_height="60dp" android:layout_weight="1" android:background="#BBDEFB" android:layout_marginEnd="4dp"/>
                 <View android:layout_width="0dp" android:layout_height="80dp" android:layout_weight="1" android:background="#90CAF9" android:layout_marginEnd="4dp"/>
                 <View android:layout_width="0dp" android:layout_height="40dp" android:layout_weight="1" android:background="#64B5F6" android:layout_marginEnd="4dp"/>
@@ -238,7 +212,7 @@
         </androidx.cardview.widget.CardView>
 
         <!-- 6. Recent Workouts -->
-        <TextView android:text="Recent Workouts" android:textSize="16sp" android:textStyle="bold" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="16dp"/>
+        <TextView android:text="Recent Workouts" android:textSize="16sp" android:textColor="@color/black" android:textStyle="bold" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="16dp"/>
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rvRecentWorkouts"
             android:layout_width="match_parent"
@@ -269,4 +243,5 @@
         </androidx.cardview.widget.CardView>
 
     </LinearLayout>
-</ScrollView>
+</androidx.core.widget.NestedScrollView>
+

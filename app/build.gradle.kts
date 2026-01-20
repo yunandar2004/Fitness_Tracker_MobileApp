@@ -1,10 +1,18 @@
-private fun DependencyHandlerScope.kapt(string: String) {}
+import java.io.FileInputStream
+import java.util.Properties
+val localProperties = Properties()
+val localPropertiesFile = rootProject.file("local.properties")
+if(localPropertiesFile.exists()){
+    localProperties.load(FileInputStream(localPropertiesFile))
+}
+val mapsApiKey = localProperties.getProperty("MAPS_API_KEY")?.replace("\"", "") ?: ""
+
 
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
-//    kotlin("kapt") // ✅ This is the Kotlin DSL way for KAPT
+//    id("org.jetbrains.kotlin.plugin.compose") version "1.9.0" // adjust if neede
 
 }
 
@@ -60,24 +68,28 @@ dependencies {
     implementation(libs.play.services.location)
 //    implementation("com.github.bumptech.glide:glide:4.15.1")
 //    kapt("com.github.bumptech.glide:compiler:4.15.1")
-
 //    implementation("com.github.bumptech.glide:glide:4.16.0")
 //    implementation("com.github.bumptech.glide:compiler:4.16.0")
+
+
     implementation("com.squareup.retrofit2:retrofit:2.9.0")
-    implementation("com.squareup.retrofit2:converter-gson:2.9.0")
-    implementation("com.squareup.okhttp3:okhttp:4.10.0")
-    implementation("com.squareup.okhttp3:logging-interceptor:4.10.0")
-    implementation("com.google.code.gson:gson:2.10.1")
-    // --- MANUAL FIXES ---
-    // Use AppCompat 1.7.1 (Latest stable compatible) and REMOVE the 1.6.1 line
-    implementation("androidx.appcompat:appcompat:1.7.1")
-    implementation("androidx.constraintlayout:constraintlayout:2.1.4")
-    implementation("com.github.bumptech.glide:glide:4.15.1")
-
-    // --- NETWORKING (FIXED FOR KOTLIN 2.0.0) ---
-    // Downgraded from 3.0.0/5.3.2 to 2.9.0/4.10.0 to fix version conflict
-
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3") // Downgraded from 1.10.2
+    implementation("com.google.android.gms:play-services-maps:18.2.0") // For displaying Google Maps and markers
+    implementation("com.google.android.gms:play-services-location:21.2.0")// For GPS and geolocation features
+    implementation(libs.androidx.appcompat)
+    implementation(libs.androidx.activity)
+    implementation(libs.androidx.constraintlayout)
+    implementation("androidx.recyclerview:recyclerview:1.3.0") // for displaying activity logs
+    implementation("com.squareup.retrofit2:retrofit:2.9.0") // REST API calls
+    implementation("com.squareup.retrofit2:converter-gson:2.9.0") // JSON serialization and deserialization
+    implementation("com.squareup.okhttp3:okhttp:4.10.0")// HTTP client for network requests
+    implementation("com.squareup.okhttp3:logging-interceptor:4.10.0") // Logs network requests for debugging
+    implementation("com.google.code.gson:gson:2.10.1") // JSON parsing library
+    implementation("androidx.appcompat:appcompat:1.7.1") // Provides backward-compatible app features
+    implementation("androidx.constraintlayout:constraintlayout:2.1.4")// For flexible UI layout design
+    implementation("com.github.bumptech.glide:glide:4.15.1")// Image loading and caching library
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3")// Asynchronous tasks using Kotlin coroutines
+    implementation(libs.androidx.activity)
+    implementation(libs.play.services.maps) // Downgraded from 1.10.2
 
     // --- TESTS ---
     testImplementation(libs.junit)
