@@ -15,7 +15,7 @@ interface ApiService {
 
     // User
     @GET("users.php?action=me")
-    suspend fun getProfile(): Response<User>
+    suspend fun getProfile(): Response<AppUser>
     @PUT("users.php?action=update")
     suspend fun updateProfile(@Body body: Map<String, String>): Response<DefaultResponse>
     @PUT("users.php?action=password")
@@ -65,7 +65,7 @@ suspend fun deleteGoal(
 
     // Admin
     @GET("admin.php?action=users")
-    suspend fun getAllUsers(): Response<List<User>>
+    suspend fun getAllUsers(): Response<List<AppUser>>
 
     @PUT("admin.php?action=role")
     suspend fun updateUserRole(@Body body: Map<String, String>): Response<DefaultResponse>

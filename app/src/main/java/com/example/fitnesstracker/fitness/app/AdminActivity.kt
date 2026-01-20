@@ -13,7 +13,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.fitnesstracker.R
-import com.example.fitnesstracker.model.User
+import com.example.fitnesstracker.model.AppUser
 import com.example.fitnesstracker.network.RetrofitClient
 import kotlinx.coroutines.launch
 
@@ -39,7 +39,7 @@ class AdminActivity : AppCompatActivity() {
         }
     }
 
-    inner class AdminAdapter(private val users: List<User>) : RecyclerView.Adapter<AdminAdapter.ViewHolder>() {
+    inner class AdminAdapter(private val users: List<AppUser>) : RecyclerView.Adapter<AdminAdapter.ViewHolder>() {
         inner class ViewHolder(v: View) : RecyclerView.ViewHolder(v) {
             val tvName = v.findViewById<TextView>(R.id.tvAdminName)
             val tvEmail = v.findViewById<TextView>(R.id.tvAdminEmail)

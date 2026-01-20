@@ -1,58 +1,119 @@
 <?php
-require __DIR__ . '/config.php';
+require_once 'config.php';
+require_once 'helpers.php';
 
-if ($_SERVER['REQUEST_METHOD'] === 'GET') {
-    if (!isset($_GET['user_id'])) {
-        respond(false, 'Missing user_id');
-    }
-    $userId = (int)$_GET['user_id'];
-    fetch_user($mysqli, $userId);
+auth_required();
 
-    $stmt = $mysqli->prepare('SELECT id, user_id, type, target_value, current_value, deadline, title, notes, created_at FROM goals WHERE user_id = ? ORDER BY created_at DESC');
-    $stmt->bind_param('i', $userId);
-    $stmt->execute();
-    $result = $stmt->get_result();
+$method = $_SERVER['REQUEST_METHOD'];
+$action = $_GET['action'] ?? '';
 
-    $goals = [];
-    while ($row = $result->fetch_assoc()) {
-        $goals[] = map_goal_row($row);
-    }
-    respond(true, 'Goals fetched', $goals);
+/* CREATE a new goal */
+if ($method === 'POST' && $action === 'create') {
+    $data = json_input();
+    require_fields($data, ['title','period']);
+
+    $stmt = $pdo->prepare("
+        INSERT INTO goals
+        (user_id, title, period, duration_minutes, start_date, end_date, created_at, updated_at)
+        VALUES (?,?,?,?,?,?,NOW(),NOW())
+    ");
+
+    $stmt->execute([
+        $_SESSION['user']['id'],
+        $data['title'],
+        $data['period'], // day | month | duration
+        $data['duration_minutes'] ?? null,
+        $data['start_date'] ?? null,
+        $data['end_date'] ?? null
+    ]);
+
+    echo json_encode(['message' => 'Goal created']);
+    exit;
 }
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $required = require_fields(['user_id', 'type', 'target_value', 'deadline', 'title'], $_POST);
-    $userId = (int)$required['user_id'];
-    fetch_user($mysqli, $userId);
+/*LIST all goals for current user */
+if ($method === 'GET' && $action === 'list') {
+    $stmt = $pdo->prepare("
+        SELECT id, title, period, duration_minutes, start_date, end_date, status, created_at, updated_at
+        FROM goals
+        WHERE user_id = ?
+        ORDER BY created_at DESC
+    ");
+    $stmt->execute([$_SESSION['user']['id']]);
+    echo json_encode($stmt->fetchAll(PDO::FETCH_ASSOC));
+    exit;
+}
 
-    $type = allowed_goal_type($required['type']);
-    $targetValue = (float)$required['target_value'];
-    $deadline = $required['deadline'];
-    $title = $required['title'];
-    $notes = $_POST['notes'] ?? null;
-    $goalId = isset($_POST['goal_id']) && $_POST['goal_id'] !== '' ? (int)$_POST['goal_id'] : null;
+/*UPDATE a goal */
+if ($method === 'PUT' && $action === 'update') {
+    $data = json_input();
+    require_fields($data, ['id','title','period']);
 
-    if ($goalId) {
-        $stmt = $mysqli->prepare('UPDATE goals SET type = ?, target_value = ?, deadline = ?, title = ?, notes = ? WHERE id = ? AND user_id = ?');
-        $stmt->bind_param('sdsssii', $type, $targetValue, $deadline, $title, $notes, $goalId, $userId);
-        $stmt->execute();
+    $stmt = $pdo->prepare("
+        UPDATE goals
+        SET title = ?, period = ?, duration_minutes = ?, start_date = ?, end_date = ?, updated_at = NOW()
+        WHERE user_id = ? AND id = ?
+    ");
+
+    $stmt->execute([
+        $data['title'],
+        $data['period'],
+        $data['duration_minutes'] ?? null,
+        $data['start_date'] ?? null,
+        $data['end_date'] ?? null,
+        $_SESSION['user']['id'],
+        $data['id']
+    ]);
+
+    echo json_encode(['message' => 'Goal updated']);
+    exit;
+}
+
+
+/* DELETE a goal */
+if ($method === 'DELETE' && $action === 'delete') {
+    $raw = file_get_contents("php://input");
+    $data = json_decode($raw, true);
+    require_fields($data, ['id']);
+
+    $stmt = $pdo->prepare("
+        DELETE FROM goals
+        WHERE user_id = ? AND id = ?
+    ");
+    $stmt->execute([
+        $_SESSION['user']['id'],
+        $data['id']
+    ]);
+
+    if ($stmt->rowCount() > 0) {
+        echo json_encode(['message' => 'Goal deleted']);
     } else {
-        $stmt = $mysqli->prepare('INSERT INTO goals(user_id, type, target_value, current_value, deadline, title, notes) VALUES (?, ?, ?, 0, ?, ?, ?)');
-        $stmt->bind_param('isdsss', $userId, $type, $targetValue, $deadline, $title, $notes);
-        $stmt->execute();
+        http_response_code(404);
+        echo json_encode(['error' => 'Goal not found']);
     }
-
-    $stmt = $mysqli->prepare('SELECT id, user_id, type, target_value, current_value, deadline, title, notes, created_at FROM goals WHERE user_id = ? ORDER BY created_at DESC');
-    $stmt->bind_param('i', $userId);
-    $stmt->execute();
-    $result = $stmt->get_result();
-    $goals = [];
-    while ($row = $result->fetch_assoc()) {
-        $goals[] = map_goal_row($row);
-    }
-
-    respond(true, $goalId ? 'Goal updated' : 'Goal created', $goals);
+    exit;
 }
 
-respond(false, 'Unsupported HTTP method', null, 405);
-?>
+
+/*RESET a goal */
+if ($method === 'POST' && $action === 'reset') {
+    $data = json_input();
+    require_fields($data, ['id']);
+
+    $stmt = $pdo->prepare("
+        UPDATE goals
+        SET status = 'reset', updated_at = NOW()
+        WHERE user_id = ? AND id = ?
+    ");
+    $stmt->execute([
+        $_SESSION['user']['id'],
+        $data['id']
+    ]);
+
+    echo json_encode(['message' => 'Goal reset']);
+    exit;
+}
+
+
+http_response_code(404);
+echo json_encode(['error' => 'Not found']);

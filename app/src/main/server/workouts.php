@@ -1,62 +1,78 @@
 <?php
-require __DIR__ . '/config.php';
+require_once 'config.php';
+require_once 'helpers.php';
 
-if ($_SERVER['REQUEST_METHOD'] === 'GET') {
-    if (!isset($_GET['user_id'])) {
-        respond(false, 'Missing user_id');
-    }
-    $userId = (int)$_GET['user_id'];
-    fetch_user($mysqli, $userId);
+auth_required();
 
-    $stmt = $mysqli->prepare('SELECT id, user_id, activity, duration_minutes, distance_km, calories, notes, location, recorded_at FROM workouts WHERE user_id = ? ORDER BY recorded_at DESC');
-    $stmt->bind_param('i', $userId);
-    $stmt->execute();
-    $result = $stmt->get_result();
-    $data = [];
-    while ($row = $result->fetch_assoc()) {
-        $data[] = [
-            'id' => (int)$row['id'],
-            'user_id' => (int)$row['user_id'],
-            'activity' => $row['activity'],
-            'duration_minutes' => (int)$row['duration_minutes'],
-            'distance_km' => $row['distance_km'] !== null ? (float)$row['distance_km'] : null,
-            'calories' => (int)$row['calories'],
-            'notes' => $row['notes'],
-            'location' => $row['location'],
-            'recorded_at' => $row['recorded_at'],
-        ];
-    }
-    respond(true, 'Workouts fetched', $data);
+$method = $_SERVER['REQUEST_METHOD'];
+$action = $_GET['action'] ?? '';
+
+$metValues = [ /* SAME MET TABLE */ ];
+
+function calc_calories_from_met($weight, $timeMin, $met) {
+    return $met * $weight * ($timeMin / 60.0);
 }
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $required = require_fields(['user_id', 'activity', 'duration_minutes', 'calories'], $_POST);
-    $userId = (int)$required['user_id'];
-    fetch_user($mysqli, $userId);
+// ----------------------
+// CREATE WORKOUT (POST)
+// ----------------------
+if ($method === 'POST' && $action === 'create') {
+    $data = json_input();
+    require_fields($data, ['activity','time_minutes']);
 
-    $activity = allowed_activity($required['activity']);
-    $duration = (int)$required['duration_minutes'];
-    $calories = (int)$required['calories'];
-    $distance = isset($_POST['distance_km']) && $_POST['distance_km'] !== '' ? (float)$_POST['distance_km'] : null;
-    $notes = $_POST['notes'] ?? null;
-    $location = $_POST['location'] ?? null;
+    $activity = $data['activity'];
+    $time = (int)$data['time_minutes'];
 
-    $stmt = $mysqli->prepare('INSERT INTO workouts(user_id, activity, duration_minutes, distance_km, calories, notes, location) VALUES (?, ?, ?, ?, ?, ?, ?)');
-    $stmt->bind_param('isidiss', $userId, $activity, $duration, $distance, $calories, $notes, $location);
-    $stmt->execute();
+    if (isset($data['burned_calories'])) {
+        $cal = (float)$data['burned_calories'];
+    } else {
+        require_fields($data, ['level']);
+        $key = $data['level'];
 
-    respond(true, 'Workout saved', [
-        'id' => $stmt->insert_id,
-        'user_id' => $userId,
-        'activity' => $activity,
-        'duration_minutes' => $duration,
-        'distance_km' => $distance,
-        'calories' => $calories,
-        'notes' => $notes,
-        'location' => $location,
-        'recorded_at' => date('c'),
+        if (!isset($metValues[$activity][$key])) {
+            http_response_code(422);
+            echo json_encode(['error' => 'Invalid level']);
+            exit;
+        }
+
+        $weight = (float)$_SESSION['user']['current_weight_kg'];
+        $cal = calc_calories_from_met($weight, $time, $metValues[$activity][$key]);
+    }
+
+    $stmt = $pdo->prepare(
+        "INSERT INTO workouts (user_id, activity, time_minutes, burned_calories, notes)
+         VALUES (?,?,?,?,?)"
+    );
+    $stmt->execute([
+        $_SESSION['user']['id'],
+        $activity,
+        $time,
+        $cal,
+        $data['notes'] ?? null
     ]);
+
+    echo json_encode([
+        'message' => 'Workout saved',
+        'burned_calories' => round($cal, 2)
+    ]);
+    exit;
 }
 
-respond(false, 'Unsupported HTTP method', null, 405);
-?>
+// ----------------------
+// GET HISTORY (GET)
+// ----------------------
+if ($method === 'GET' && $action === 'history') {
+    $stmt = $pdo->prepare("SELECT activity, time_minutes, burned_calories, notes, created_at FROM workouts WHERE user_id=? ORDER BY created_at DESC");
+    $stmt->execute([$_SESSION['user']['id']]);
+    $workouts = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+    echo json_encode($workouts);
+    exit;
+}
+
+// ----------------------
+// INVALID REQUEST
+// ----------------------
+http_response_code(400);
+echo json_encode(['error' => 'Invalid action']);
+exit;

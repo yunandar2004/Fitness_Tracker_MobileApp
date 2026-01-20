@@ -1,8 +1,9 @@
 <?php
-require __DIR__ . '/config.php';
+require 'config.php';
 
-if ($mysqli->ping()) {
-    respond(true, 'DB connection OK');
+try {
+    $pdo->query("SELECT 1");
+    echo json_encode(['success' => true, 'message' => 'DB connection OK']);
+} catch (Exception $e) {
+    echo json_encode(['success' => false, 'message' => 'Unable to reach DB: ' . $e->getMessage()]);
 }
-respond(false, 'DB connection failed');
-?>

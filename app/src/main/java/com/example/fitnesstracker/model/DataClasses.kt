@@ -2,7 +2,7 @@
 package com.example.fitnesstracker.model
 data class DefaultResponse(val message: String)
 data class LoginResponse(val message: String, val role: String, val dashboard: String)
-data class User(
+open data class User(
     val id: Int,
     val name: String,
     val email: String,
