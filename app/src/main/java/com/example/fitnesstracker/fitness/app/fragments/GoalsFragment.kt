@@ -190,6 +190,35 @@ class GoalsFragment : Fragment() {
             }
         }
     }
+    private fun deleteGoal(goal: Goal) {
+        val body = mapOf("id" to goal.id.toString())
+
+        CoroutineScope(Dispatchers.IO).launch {
+            try {
+                val response = RetrofitClient.instance.deleteGoal(body)
+
+                withContext(Dispatchers.Main) {
+                    if (response.isSuccessful) {
+                        showToast("Goal deleted")
+
+                        val position = goalsList.indexOf(goal)
+                        if (position != -1) {
+                            goalsList.removeAt(position)
+                            adapter.notifyItemRemoved(position)
+                        }
+
+                    } else {
+                        showToast("Failed to delete goal")
+                    }
+                }
+            } catch (e: Exception) {
+                withContext(Dispatchers.Main) {
+                    showToast("Error: ${e.message}")
+                }
+            }
+        }
+    }
+
 
     private fun performLogout() {
         lifecycleScope.launch {
@@ -244,6 +273,7 @@ class GoalsFragment : Fragment() {
             val btnReset: Button = itemView.findViewById(R.id.btnResetGoal)
             val btnEdit: Button = itemView.findViewById(R.id.btnEditGoal)
         }
+
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): GoalViewHolder {
             val view = LayoutInflater.from(parent.context)
                 .inflate(R.layout.row_goal, parent, false)
@@ -264,7 +294,7 @@ class GoalsFragment : Fragment() {
             holder.tvProgressText.text =
                 "Progress: ${goal.current_value ?: 0} / ${goal.target_value ?: 0}"
 
-            holder.btnReset.setOnClickListener { resetGoal(goal) }
+            holder.btnReset.setOnClickListener {    deleteGoal(goal) }
             holder.btnEdit.setOnClickListener { editGoal(goal) }
         }
 
@@ -280,4 +310,5 @@ class GoalsFragment : Fragment() {
             btnSetGoal.text = "Update Goal"
         }
     }
+
 }
