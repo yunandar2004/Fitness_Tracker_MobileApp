@@ -1,6 +1,7 @@
 
 package com.example.fitnesstracker.ui.goals
 
+import androidx.appcompat.app.AlertDialog
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -157,22 +158,7 @@ class GoalsFragment : Fragment() {
         }
     }
 
-//    private fun resetGoal(goal: Goal) {
-//        val body = mapOf("id" to goal.id.toString())
-//        CoroutineScope(Dispatchers.IO).launch {
-//            try {
-//                val response = RetrofitClient.instance.resetGoal(body)
-//                if (response.isSuccessful) {
-//                    withContext(Dispatchers.Main) {
-//                        showToast("Goal reset")
-//                        fetchGoals() // Fetch updated list, removed from UI
-//                    }
-//                } else showToast("Failed to reset goal")
-//            } catch (e: Exception) {
-//                withContext(Dispatchers.Main) { showToast("Error: ${e.message}") }
-//            }
-//        }
-//    }
+
 
     private fun resetGoal(goal: Goal) {
         val body = mapOf("id" to goal.id.toString())
@@ -220,6 +206,7 @@ class GoalsFragment : Fragment() {
     }
 
 
+
     private fun performLogout() {
         lifecycleScope.launch {
             try {
@@ -256,6 +243,19 @@ class GoalsFragment : Fragment() {
         etGoalDeadline.text?.clear()
         btnSetGoal.text = "Save Goal"
         editingGoalId = null
+    }
+    private fun showDeleteDialog(goal: Goal) {
+        AlertDialog.Builder(requireContext())
+            .setTitle("Your Goal rested")
+            .setMessage("Are you sure you want to reset this goal?")
+            .setCancelable(false)
+            .setPositiveButton("Reset") { _, _ ->
+                deleteGoal(goal)
+            }
+            .setNegativeButton("Cancel") { dialog, _ ->
+                dialog.dismiss()
+            }
+            .show()
     }
 
     private fun showToast(message: String) {
@@ -294,7 +294,9 @@ class GoalsFragment : Fragment() {
             holder.tvProgressText.text =
                 "Progress: ${goal.current_value ?: 0} / ${goal.target_value ?: 0}"
 
-            holder.btnReset.setOnClickListener {    deleteGoal(goal) }
+            holder.btnReset.setOnClickListener {
+                showDeleteDialog(goal)
+            }
             holder.btnEdit.setOnClickListener { editGoal(goal) }
         }
 
