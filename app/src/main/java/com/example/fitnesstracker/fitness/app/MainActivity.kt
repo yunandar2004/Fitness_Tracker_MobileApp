@@ -1,4 +1,3 @@
-
 package com.example.fitnesstracker.fitness.app
 
 import android.content.Intent
@@ -10,21 +9,27 @@ import androidx.lifecycle.lifecycleScope
 import com.example.fitnesstracker.R
 import com.example.fitnesstracker.network.RetrofitClient
 import com.example.fitnesstracker.fitness.app.fragments.*
-import com.example.fitnesstracker.network.SessionManager
 import com.example.fitnesstracker.ui.goals.GoalsFragment
+import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import kotlinx.coroutines.launch
 
 class MainActivity : AppCompatActivity() {
+
+    private lateinit var bottomNav: BottomNavigationView
+    private lateinit var fab: FloatingActionButton
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         setContentView(R.layout.activity_main)
 
+        // Initialize RetrofitClient safely
         try { RetrofitClient.init(this) } catch (e: Exception) {}
 
         checkUserRole()
 
-        val bottomNav = findViewById<com.google.android.material.bottomnavigation.BottomNavigationView>(R.id.bottomNav)
+        // Initialize BottomNavigationView
+        bottomNav = findViewById(R.id.bottomNav)
         bottomNav.setOnItemSelectedListener {
             when(it.itemId) {
                 R.id.nav_home -> replaceFragment(HomeFragment())
@@ -35,15 +40,42 @@ class MainActivity : AppCompatActivity() {
             }
             true
         }
+
+        // Initialize FloatingActionButton
+        fab = findViewById(R.id.fab)
+        fab.setOnClickListener {
+            // Only navigate to GoalsFragment if not already there
+            val currentFragment = supportFragmentManager.findFragmentById(R.id.fragmentContainer)
+            if (currentFragment !is GoalsFragment) {
+                replaceFragmentWithAnimation(GoalsFragment())
+            }
+        }
+
+        // Set default fragment to Home
         replaceFragment(HomeFragment())
     }
 
+    // Function to replace fragments without animation
     private fun replaceFragment(fragment: Fragment) {
         supportFragmentManager.beginTransaction()
             .replace(R.id.fragmentContainer, fragment)
             .commit()
     }
 
+    // Function to replace fragments with a slide animation
+    private fun replaceFragmentWithAnimation(fragment: Fragment) {
+        supportFragmentManager.beginTransaction()
+            .setCustomAnimations(
+                android.R.anim.slide_in_left,
+                android.R.anim.slide_out_right,
+                android.R.anim.slide_in_left,
+                android.R.anim.slide_out_right
+            )
+            .replace(R.id.fragmentContainer, fragment)
+            .commit()
+    }
+
+    // Check user role from API and redirect if admin
     private fun checkUserRole() {
         lifecycleScope.launch {
             try {
@@ -57,7 +89,9 @@ class MainActivity : AppCompatActivity() {
                         finish()
                     }
                 }
-            } catch (e: Exception) {}
+            } catch (e: Exception) {
+                // Optional: Log error
+            }
         }
     }
 }
