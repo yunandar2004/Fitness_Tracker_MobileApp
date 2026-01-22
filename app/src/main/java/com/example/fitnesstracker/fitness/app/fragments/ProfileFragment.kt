@@ -1,18 +1,14 @@
-
 package com.example.fitnesstracker.fitness.app.fragments
 
-import android.app.Activity
 import android.app.AlertDialog
-import android.content.Context
 import android.content.Intent
-import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Bundle
-import android.provider.MediaStore
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import com.example.fitnesstracker.R
@@ -26,60 +22,81 @@ import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody.Companion.asRequestBody
 import java.io.File
+import java.net.URL
 
 class ProfileFragment : Fragment() {
 
-    private val IMAGE_PICK_CODE = 1001
     private var selectedImageUri: Uri? = null
 
     private lateinit var imgProfile: ImageView
+    private lateinit var tvName: TextView
     private lateinit var tvEmail: TextView
     private lateinit var etName: EditText
     private lateinit var etWeight: EditText
+    private lateinit var etEmail: EditText
+
+    private lateinit var etDOB: EditText
+    private lateinit var spGender: Spinner
     private lateinit var etOldPass: EditText
     private lateinit var etNewPass: EditText
 
+    // Modern image picker
+    private val imagePicker =
+        registerForActivityResult(ActivityResultContracts.GetContent()) { uri ->
+            uri?.let {
+                selectedImageUri = it
+                imgProfile.setImageURI(it)
+            }
+        }
+
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
-    ): View? {
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
         return inflater.inflate(R.layout.fragment_profile, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // Views
+        // Initialize views
         imgProfile = view.findViewById(R.id.imgProfile)
+        tvName = view.findViewById(R.id.tvProfileName)
         tvEmail = view.findViewById(R.id.tvProfileEmail)
         etName = view.findViewById(R.id.etProfileName)
         etWeight = view.findViewById(R.id.etProfileWeight)
+        etEmail = view.findViewById(R.id.etEmail)
+        etDOB = view.findViewById(R.id.etDOB)
+        spGender = view.findViewById(R.id.spGender)
         etOldPass = view.findViewById(R.id.etOldPassword)
         etNewPass = view.findViewById(R.id.etNewPassword)
 
-        // Load profile from server
+        // Setup Gender Spinner
+        val genderOptions = listOf("Male", "Female", "Other")
+        val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, genderOptions)
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        spGender.adapter = adapter
+
+        // Load backend profile
         loadProfile()
 
-        // Change profile image
+        // Button listeners
         view.findViewById<Button>(R.id.btnRandomImage).setOnClickListener {
-            pickImageFromGallery()
+            imagePicker.launch("image/*")
         }
 
-        // Update profile info
         view.findViewById<Button>(R.id.btnUpdateProfile).setOnClickListener {
             updateProfile()
         }
 
-        // Change password
         view.findViewById<Button>(R.id.btnChangePass).setOnClickListener {
             changePassword()
         }
 
-        // Logout
         view.findViewById<Button>(R.id.btnLogout).setOnClickListener {
-            performLogout()
+            logout()
         }
 
-        // Delete account
         view.findViewById<Button>(R.id.btnDeleteAccount).setOnClickListener {
             AlertDialog.Builder(requireContext())
                 .setTitle("Delete Account")
@@ -90,27 +107,34 @@ class ProfileFragment : Fragment() {
         }
     }
 
-    // ---------------- PROFILE ----------------
+    // ---------------- LOAD PROFILE ----------------
     private fun loadProfile() {
         lifecycleScope.launch {
             try {
                 val res = RetrofitClient.instance.getProfile()
                 if (res.isSuccessful && res.body() != null) {
-                    val u = res.body()!!
+                    val user = res.body()!!
 
-                    // UI updates on main thread
-                    requireActivity().runOnUiThread {
-                        tvEmail.text = u.email
-                        etName.setText(u.name)
-                        etWeight.setText(u.current_weight_kg.toString())
+                    // Set top name/email
+                    tvName.text = user.name
+                    tvEmail.text = user.email
 
-                        // Load profile image without Glide
-                        val imageUrl = u.profile_image
-                        if (!imageUrl.isNullOrEmpty()) {
-                            loadImageFromUrl(imageUrl, imgProfile)
-                        } else {
-                            imgProfile.setImageResource(R.drawable.ic_android_black_24dp)
-                        }
+                    // Editable fields
+                    etName.setText(user.name)
+                    etEmail.setText(user.email)
+                    etWeight.setText(user.current_weight_kg.toString())
+                    etDOB.setText(user.date_of_birth ?: "")
+
+                    // Gender spinner selection
+                    user.gender?.let { gender ->
+                        val pos = (spGender.adapter as ArrayAdapter<String>).getPosition(gender)
+                        if (pos >= 0) spGender.setSelection(pos)
+                    }
+
+                    // Load profile image
+                    user.profile_image?.let { path ->
+                        val fullUrl = if (path.startsWith("http")) path else RetrofitClient.BASE_URL + path
+                        loadImage(fullUrl)
                     }
                 }
             } catch (e: Exception) {
@@ -119,140 +143,111 @@ class ProfileFragment : Fragment() {
         }
     }
 
-    // Native image loader
-    private fun loadImageFromUrl(url: String, imageView: ImageView) {
+    private fun loadImage(url: String) {
         lifecycleScope.launch {
             try {
                 val bitmap = withContext(Dispatchers.IO) {
-                    val stream = java.net.URL(url).openStream()
-                    BitmapFactory.decodeStream(stream)
+                    val stream = URL(url).openStream()
+                    android.graphics.BitmapFactory.decodeStream(stream)
                 }
-                imageView.setImageBitmap(bitmap)
+                imgProfile.setImageBitmap(bitmap)
             } catch (e: Exception) {
-                e.printStackTrace()
-                imageView.setImageResource(R.drawable.ic_android_black_24dp)
+                imgProfile.setImageResource(R.drawable.ic_android_black_24dp)
             }
         }
     }
 
+    // ---------------- UPDATE PROFILE ----------------
     private fun updateProfile() {
-        val map = mapOf(
+        val body = mapOf(
             "name" to etName.text.toString(),
-            "current_weight_kg" to etWeight.text.toString()
+            "current_weight_kg" to etWeight.text.toString(),
+            "gender" to spGender.selectedItem.toString(),
+            "email" to etEmail.text.toString(),          // <-- added email here
+            "date_of_birth" to etDOB.text.toString()
         )
 
         lifecycleScope.launch {
             try {
-                val res = RetrofitClient.instance.updateProfile(map)
+                val res = RetrofitClient.instance.updateProfile(body)
                 if (res.isSuccessful) {
-                    requireActivity().runOnUiThread {
-                        Toast.makeText(requireContext(), "Profile updated", Toast.LENGTH_SHORT).show()
-                    }
+                    Toast.makeText(requireContext(), "Profile updated", Toast.LENGTH_SHORT).show()
+                    SessionManager.saveUsername(etName.text.toString())
+                    selectedImageUri?.let { uploadImage(it) }
+                } else {
+                    Toast.makeText(requireContext(), "Failed to update profile", Toast.LENGTH_SHORT).show()
                 }
             } catch (e: Exception) {
                 e.printStackTrace()
             }
-
-            // Upload image if selected
-            selectedImageUri?.let { uploadProfileImage(it) }
         }
     }
 
-    // ---------------- PASSWORD ----------------
+    // ---------------- CHANGE PASSWORD ----------------
     private fun changePassword() {
-        val map = mapOf(
+        val body = mapOf(
             "old_password" to etOldPass.text.toString(),
             "new_password" to etNewPass.text.toString()
         )
+
         lifecycleScope.launch {
             try {
-                val res = RetrofitClient.instance.changePassword(map)
-                requireActivity().runOnUiThread {
-                    if (res.isSuccessful) Toast.makeText(requireContext(), "Password changed", Toast.LENGTH_SHORT).show()
-                    else Toast.makeText(requireContext(), "Failed to change password", Toast.LENGTH_SHORT).show()
+                val res = RetrofitClient.instance.changePassword(body)
+                if (res.isSuccessful) {
+                    Toast.makeText(requireContext(), "Password changed", Toast.LENGTH_SHORT).show()
+                    etOldPass.text.clear()
+                    etNewPass.text.clear()
+                } else {
+                    Toast.makeText(requireContext(), "Password change failed", Toast.LENGTH_SHORT).show()
                 }
             } catch (e: Exception) {
                 e.printStackTrace()
-                requireActivity().runOnUiThread {
-                    Toast.makeText(requireContext(), "Error changing password", Toast.LENGTH_SHORT).show()
-                }
             }
+        }
+    }
+
+    // ---------------- DELETE ACCOUNT ----------------
+    private fun deleteAccount() {
+        lifecycleScope.launch {
+            try {
+                RetrofitClient.instance.deleteAccount(emptyMap())
+            } catch (e: Exception) { e.printStackTrace() }
+            finally { logout() }
         }
     }
 
     // ---------------- LOGOUT ----------------
-    private fun performLogout() {
-        lifecycleScope.launch {
-            try {
-                SessionManager.clearSession()
-                val intent = Intent(requireContext(), LoginActivity::class.java)
-                intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-                startActivity(intent)
-                requireActivity().finish()
-            } catch (e: Exception) {
-                e.printStackTrace()
-                SessionManager.clearSession()
-                requireActivity().finish()
-            }
-        }
-    }
-
-    // ---------------- DELETE ----------------
-    private fun deleteAccount() {
-        lifecycleScope.launch {
-            try {
-                RetrofitClient.instance.deleteAccount(mapOf())
-            } catch (e: Exception) {
-                e.printStackTrace()
-            } finally {
-                performLogout()
-            }
-        }
-    }
-
-    // ---------------- IMAGE PICK ----------------
-    private fun pickImageFromGallery() {
-        val intent = Intent(Intent.ACTION_PICK)
-        intent.type = "image/*"
-        startActivityForResult(intent, IMAGE_PICK_CODE)
-    }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == IMAGE_PICK_CODE && resultCode == Activity.RESULT_OK) {
-            selectedImageUri = data?.data
-            selectedImageUri?.let { imgProfile.setImageURI(it) }
-        }
+    private fun logout() {
+        SessionManager.clearSession()
+        val intent = Intent(requireContext(), LoginActivity::class.java)
+        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+        startActivity(intent)
+        requireActivity().finish()
     }
 
     // ---------------- IMAGE UPLOAD ----------------
-    private fun uploadProfileImage(uri: Uri) {
+    private fun uploadImage(uri: Uri) {
         lifecycleScope.launch {
             try {
-                val file = File(getRealPathFromURI(requireContext(), uri))
-                val requestFile = file.asRequestBody("image/*".toMediaTypeOrNull())
-                val body = MultipartBody.Part.createFormData("profile_image", file.name, requestFile)
+                val file = uriToFile(uri)
+                val requestBody = file.asRequestBody("image/*".toMediaTypeOrNull())
+                val part = MultipartBody.Part.createFormData("profile_image", file.name, requestBody)
 
-                val res = RetrofitClient.instance.uploadProfileImage(body)
-                requireActivity().runOnUiThread {
-                    if (res.isSuccessful) Toast.makeText(requireContext(), "Profile image updated", Toast.LENGTH_SHORT).show()
-                    else Toast.makeText(requireContext(), "Failed to upload image", Toast.LENGTH_SHORT).show()
+                val res = RetrofitClient.instance.uploadProfileImage(part)
+                if (res.isSuccessful) {
+                    Toast.makeText(requireContext(), "Image updated", Toast.LENGTH_SHORT).show()
                 }
             } catch (e: Exception) {
                 e.printStackTrace()
-                requireActivity().runOnUiThread {
-                    Toast.makeText(requireContext(), "Failed to upload image", Toast.LENGTH_SHORT).show()
-                }
+                Toast.makeText(requireContext(), "Image upload failed", Toast.LENGTH_SHORT).show()
             }
         }
     }
 
-    private fun getRealPathFromURI(context: Context, contentUri: Uri): String {
-        val cursor = context.contentResolver.query(contentUri, null, null, null, null)
-        cursor?.moveToFirst()
-        val idx = cursor?.getColumnIndex(MediaStore.Images.ImageColumns.DATA) ?: 0
-        val path = cursor?.getString(idx) ?: ""
-        cursor?.close()
-        return path
+    private fun uriToFile(uri: Uri): File {
+        val input = requireContext().contentResolver.openInputStream(uri)!!
+        val file = File(requireContext().cacheDir, "profile_upload.jpg")
+        file.outputStream().use { input.copyTo(it) }
+        return file
     }
 }

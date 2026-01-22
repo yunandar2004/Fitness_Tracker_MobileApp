@@ -1,5 +1,3 @@
-
-
 package com.example.fitnesstracker.fitness.app
 
 import android.content.Intent
@@ -13,6 +11,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.example.fitnesstracker.R
 import com.example.fitnesstracker.network.RetrofitClient
+import com.example.fitnesstracker.network.SessionManager
 import kotlinx.coroutines.launch
 
 class LoginActivity : AppCompatActivity() {
@@ -46,6 +45,7 @@ class LoginActivity : AppCompatActivity() {
             try {
                 val response = RetrofitClient.instance.login(mapOf("email" to email, "password" to password))
                 if (response.isSuccessful && response.body() != null) {
+
                     Toast.makeText(this@LoginActivity, "Login Successful", Toast.LENGTH_SHORT).show()
                     val intent = Intent(this@LoginActivity, MainActivity::class.java)
                     intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK

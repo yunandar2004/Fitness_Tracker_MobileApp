@@ -1,6 +1,6 @@
-
 package com.example.fitnesstracker.ui.goals
 
+import android.annotation.SuppressLint
 import androidx.appcompat.app.AlertDialog
 import android.content.Intent
 import android.os.Bundle
@@ -39,6 +39,7 @@ class GoalsFragment : Fragment() {
 
     private var editingGoalId: Int? = null
 
+    @SuppressLint("SetTextI18n")
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -56,8 +57,8 @@ class GoalsFragment : Fragment() {
         rvMyGoals = view.findViewById(R.id.rvMyGoals)
         val btnLogout = view.findViewById<Button>(R.id.btnLogout)
 
-
         RetrofitClient.init(requireContext())
+        SessionManager.init(requireContext())  // <-- make sure this is called
 
         tvWelcome.text = "Welcome, ${SessionManager.getUsername()}"
         btnLogout.setOnClickListener {

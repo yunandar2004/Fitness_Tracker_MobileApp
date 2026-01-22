@@ -1,7 +1,3 @@
-
-
-
-
 package com.example.fitnesstracker.fitness.app.fragments
 
 import android.Manifest
@@ -13,15 +9,16 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
+import androidx.annotation.RequiresPermission
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.fitnesstracker.R
-import com.example.fitnesstracker.model.Workout
 import com.example.fitnesstracker.network.RetrofitClient
 import com.example.fitnesstracker.fitness.app.MapActivity
+import com.example.fitnesstracker.model.Workout
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import kotlinx.coroutines.launch
@@ -133,6 +130,7 @@ class HomeFragment : Fragment() {
         rv.adapter = RecentWorkoutAdapter(workouts.take(3)) // latest 3 workouts
     }
 
+    @RequiresPermission(allOf = [Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION])
     private fun getLastLoc(tv: TextView) {
         fusedLocationClient.lastLocation.addOnSuccessListener { loc ->
             if (loc != null) tv.text = "Lat: ${loc.latitude}, Lng: ${loc.longitude}"

@@ -81,35 +81,45 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="12dp"/>
 
+<!--        <Spinner-->
+<!--            android:id="@+id/spGender"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:entries="@array/gender_options" />-->
+
         <EditText
-            android:id="@+id/etDob"
-            android:hint="Date of Birth (YYYY-MM-DD)"
+            android:id="@+id/etDOB"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="12dp"/>
+            android:hint="YYYY-MM-DD"
+            android:focusable="true"
+            android:clickable="true"
+            android:inputType="date" />
 
         <Spinner
-            android:id="@+id/spinnerGender"
+            android:id="@+id/spGender"
             android:layout_width="match_parent"
             android:entries="@array/gender_array"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            />
 
         <!-- ================= HEALTH DATA ================= -->
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="#444"
-            android:layout_marginTop="24dp"
-            android:layout_marginBottom="16dp"/>
+<!--        <View-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="1dp"-->
+<!--            android:background="#444"-->
+<!--            android:layout_marginTop="24dp"-->
+<!--            android:layout_marginBottom="5dp"/>-->
 
-        <TextView
-            android:text="⚖️ Health and Fitness Data"
-            android:textSize="16sp"
-            android:textStyle="bold"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textColor="@android:color/white"
-            android:layout_marginBottom="8dp"/>
+<!--        <TextView-->
+<!--            android:text="⚖️ Health and Fitness Data"-->
+<!--            android:textSize="16sp"-->
+<!--            android:textStyle="bold"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:textColor="@android:color/white"-->
+<!--            android:layout_marginBottom="8dp"/>-->
 
         <EditText
             android:id="@+id/etProfileWeight"
@@ -120,8 +130,8 @@
             android:layout_marginBottom="12dp"/>
 
         <EditText
-            android:id="@+id/etProfileHeight"
-            android:hint="Height (cm)"
+            android:id="@+id/etEmail"
+            android:hint="Email"
             android:inputType="number"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>

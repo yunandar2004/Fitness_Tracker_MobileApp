@@ -14,19 +14,29 @@ interface ApiService {
     suspend fun logout(): Response<DefaultResponse>
 
     // User
-    @GET("users.php?action=me")
-    suspend fun getProfile(): Response<AppUser>
+@GET("users.php?action=me")
+suspend fun getProfile(): Response<User>
+
     @PUT("users.php?action=update")
-    suspend fun updateProfile(@Body body: Map<String, String>): Response<DefaultResponse>
+    suspend fun updateProfile(
+        @Body body: Map<String, String>
+    ): Response<DefaultResponse>
+
     @PUT("users.php?action=password")
-    suspend fun changePassword(@Body body: Map<String, String>): Response<DefaultResponse>
+    suspend fun changePassword(
+        @Body body: Map<String, String>
+    ): Response<DefaultResponse>
+
     @HTTP(method = "DELETE", path = "users.php?action=delete", hasBody = true)
-    suspend fun deleteAccount(@Body body: Map<String, String>): Response<DefaultResponse>
+    suspend fun deleteAccount(
+        @Body body: Map<String, String>
+    ): Response<DefaultResponse>
+
     @Multipart
-    @POST("profile/update_image")
+    @POST("users.php?action=update_image")
     suspend fun uploadProfileImage(
         @Part profile_image: MultipartBody.Part
-    ): Response<Any>
+    ): Response<DefaultResponse>
 
     // Goals
     @POST("goals.php?action=create")
@@ -42,16 +52,16 @@ interface ApiService {
     @PUT("goals.php?action=update")
     suspend fun updateGoal(@Body body: Map<String, String>): Response<DefaultResponse>
 
-//    @HTTP(method = "DELETE", path = "goals.php?action=delete", hasBody = true)
+    //    @HTTP(method = "DELETE", path = "goals.php?action=delete", hasBody = true)
 //    suspend fun deleteGoal(@Body body: Map<String, String>): Response<DefaultResponse>
-@HTTP(
-    method = "DELETE",
-    path = "goals.php?action=delete",
-    hasBody = true
-)
-suspend fun deleteGoal(
-    @Body body: Map<String, String>
-): Response<DefaultResponse>
+    @HTTP(
+        method = "DELETE",
+        path = "goals.php?action=delete",
+        hasBody = true
+    )
+    suspend fun deleteGoal(
+        @Body body: Map<String, String>
+    ): Response<DefaultResponse>
 
     // Workouts
     @POST("workouts.php?action=create")
@@ -65,7 +75,7 @@ suspend fun deleteGoal(
 
     // Admin
     @GET("admin.php?action=users")
-    suspend fun getAllUsers(): Response<List<AppUser>>
+    suspend fun getAllUsers(): Response<List<User>>
 
     @PUT("admin.php?action=role")
     suspend fun updateUserRole(@Body body: Map<String, String>): Response<DefaultResponse>

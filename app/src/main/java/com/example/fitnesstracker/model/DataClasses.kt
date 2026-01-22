@@ -2,12 +2,12 @@
 package com.example.fitnesstracker.model
 data class DefaultResponse(val message: String)
 data class LoginResponse(val message: String, val role: String, val dashboard: String)
-open data class User(
+data class User(
     val id: Int,
     val name: String,
     val email: String,
     val date_of_birth: String,
-    val current_weight_kg: Double,
+    val current_weight_kg: Float,
     val gender: String,
     val role: String,
     val profile_image: String? // <- nullable
